@@ -6,7 +6,10 @@ import { Engine, Render, World, Bodies, Composite, Mouse, Body } from 'matter-js
 export default function Wall() {
     useEffect(() => {
         const engine = Engine.create();
-    
+        // engine.world.gravity.y = 0.5; // The default is 1
+
+        // Adjust the time scale (e.g. 0.5 to slow down the simulation to half speed)
+        engine.timing.timeScale = 0.6;
         const canvasElement = document.getElementById('matter-js-canvas') as HTMLElement | null;
         const render = Render.create({
           element: canvasElement!,
@@ -84,9 +87,9 @@ render.canvas.addEventListener("mousedown", event => {
   ) {
     // Animate launcher position
     let startTime = Date.now();
-    const duration = 2000; // 2 seconds
+    const duration = 1000; // 2 seconds
     const initialY = launcher.position.y;
-    const targetY = 150;
+    const targetY = 130;
 
     const animationFrame = () => {
       const currentTime = Date.now();
