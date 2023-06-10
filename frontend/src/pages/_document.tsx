@@ -5,7 +5,6 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <body>
-        <p>テスと</p>
         <Main />
         <NextScript />
       </body>
