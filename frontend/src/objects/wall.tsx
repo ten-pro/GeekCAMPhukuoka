@@ -9,10 +9,7 @@ export default function Wall() {
   const isColliding = useRef<boolean>(false); 
     useEffect(() => {
         const engine = Engine.create();
-        // engine.world.gravity.y = 0.5; // The default is 1
-
-        // Adjust the time scale (e.g. 0.5 to slow down the simulation to half speed)
-        engine.timing.timeScale = 0.5;
+        engine.timing.timeScale = 0.5;//重力
         const canvasElement = document.getElementById('matter-js-canvas') as HTMLElement | null;
         const render = Render.create({
           element: canvasElement!,
@@ -23,85 +20,93 @@ export default function Wall() {
             wireframes: false,
             background: 'gray' 
           }
-        });
-        // const wall = Bodies.rectangle(leftMargin, topPadding, width, height, {
-
-
+        });//Matterjsの描画範囲
     const wallTop = Bodies.rectangle(500, -30, 1000, 100, {
       isStatic: true,
       restitution: 0
-    });
+    });//上の壁
+    
     const wallLeft = Bodies.rectangle(-30, 405, 780, 100, {
       isStatic: true,
       angle: Math.PI / 2,
       restitution: 0
-    });
+    });//左の壁
     const wallRight = Bodies.rectangle(1030, 400, 765, 100, {
       isStatic: true,
       angle: Math.PI / 2,
       restitution: 0
-    });
+    });//右の壁
     const wallBottom = Bodies.rectangle(500, 830, 1100, 100, {
       isStatic: true,
       restitution: 0
-    });
-    const ball = Bodies.circle(960, 520, 20, { restitution: 0.3}); 
+    });//地面
+    const ball = Bodies.circle(960, 520, 20, { restitution: 1.3}); //ボール
 
     const patation = Bodies.rectangle(910, 470, 630, 20, {
       isStatic: true,
       angle: Math.PI / 2,
       restitution: 0
-    });
+    });//発射台の左の壁
     const launcher = Bodies.rectangle(950, 750, 70, 70, {
       isStatic: true,
       restitution: 2
-    });
+    });//発射台、真四角の図形
     const diagonal = Bodies.rectangle(950, 70, 150, 20, {
       isStatic: true,
       angle: 4,
       restitution: 1
-    });
-    const object = Bodies.rectangle(750, 750, 70, 70, {
+    });//右上の斜めの図形
+    const object1 = Bodies.rectangle(750, 750, 70, 70, {
       isStatic: true,
       restitution: 1
     });
-    Composite.add(engine.world, [object, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);
-
-    World.add(engine.world, [object, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);
+    const object2 = Bodies.rectangle(650, 750, 70, 70, {
+      isStatic: true,
+      restitution: 1
+    });
+    Composite.add(engine.world, [object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
 
     Engine.run(engine);
     Render.run(render);
-    // ...
+
     Events.on(engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
-        if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === object) || (pair.bodyA === object && pair.bodyB === ball))) {
+        if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === object1) || (pair.bodyA === object1 && pair.bodyB === ball))) {
+          // Collision detected, increase points
+          setPoints(prevPoints => prevPoints + 10);
+          // Set isColliding to true to avoid adding points again until collision ends
+          isColliding.current = true;
+        }
+        if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === object2) || (pair.bodyA === object2 && pair.bodyB === ball))) {
           // Collision detected, increase points
           setPoints(prevPoints => prevPoints + 10);
           // Set isColliding to true to avoid adding points again until collision ends
           isColliding.current = true;
         }
       });
-    });
+    });//オブジェクトが衝突した時の処理
 
     Events.on(engine, 'collisionEnd', (event) => {
       event.pairs.forEach((pair) => {
-        if (isColliding.current && ((pair.bodyA === ball && pair.bodyB === object) || (pair.bodyA === object && pair.bodyB === ball))) {
+        if (isColliding.current && ((pair.bodyA === ball && pair.bodyB === object1) || (pair.bodyA === object1 && pair.bodyB === ball))) {
+          // Set isColliding back to false
+          isColliding.current = false;
+        }
+        if (isColliding.current && ((pair.bodyA === ball && pair.bodyB === object2) || (pair.bodyA === object2 && pair.bodyB === ball))) {
           // Set isColliding back to false
           isColliding.current = false;
         }
       });
-    });
+    });//オブジェクトが衝突し終わった時の処理
     Events.on(engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
-        // ... other collision checks ...
-
-        // Step 2: Check for collision with wallBottom
         if ((pair.bodyA === ball && pair.bodyB === wallBottom) || (pair.bodyA === wallBottom && pair.bodyB === ball)) {
           setGameOver(true);
         }
       });
-    });
-const mouse = Mouse.create(render.canvas);
+    });//地面と接触した時のゲームオーバー処理
+const mouse = Mouse.create(render.canvas);//発射台のクリック検知
 
 // Attach mouse down event
 render.canvas.addEventListener("mousedown", event => {
@@ -159,7 +164,7 @@ render.canvas.addEventListener("mousedown", event => {
 
     requestAnimationFrame(animationFrame);
   }
-});
+});//発射台のクリックイベント、アニメーション
 
     return () => {
         Engine.clear(engine);
@@ -173,9 +178,10 @@ render.canvas.addEventListener("mousedown", event => {
     return (
       <div>
         <div id="matter-js-canvas"></div>
-        {gameOver && <div>終了</div>}
-        <div>Points: {points}</div>
-        
+          <div style={{ display: 'flex' }}>
+            {gameOver && <div>終了</div>}
+            <div>Points: {points}</div>
+          </div>
       </div>
     );
   }
