@@ -11,46 +11,43 @@ export default function Wall() {
           element: canvasElement!,
           engine: engine,
           options: {
-            width: 800,
-            height: 600,
+            width: 1000,
+            height: 800,
             wireframes: false,
-            background: 'transparent' 
+            background: 'gray' 
           }
         });
+        // const wall = Bodies.rectangle(leftMargin, topPadding, width, height, {
 
-    const ground = Bodies.rectangle(400, 610, 810, 60, {
+
+    const wallTop = Bodies.rectangle(500, -30, 1000, 100, {
       isStatic: true,
-      render: {
-        fillStyle: 'transparent',
-        strokeStyle: 'black',
-        lineWidth: 1
-      }
+      restitution: 0
     });
-
-    const chimney3 = Bodies.rectangle(0, 300, 553, 18, {
+    const wallLeft = Bodies.rectangle(-30, 405, 780, 100, {
       isStatic: true,
       angle: Math.PI / 2,
-      restitution: 0.8
+      restitution: 0
     });
-    const chimney4 = Bodies.rectangle(600, 300, 553, 18, {
+    const wallRight = Bodies.rectangle(1030, 400, 765, 100, {
       isStatic: true,
       angle: Math.PI / 2,
-      restitution: 0.8
+      restitution: 0
     });
-    const chimney5 = Bodies.rectangle(90, 570, 190, 11, {
+    const wallBottom = Bodies.rectangle(500, 830, 1100, 100, {
       isStatic: true,
-      angle: Math.PI / 7,
-      restitution: 0.8
+      restitution: 0
     });
-    const chimney6 = Bodies.rectangle(510, 570, 190, 11, {
+    const ball = Bodies.circle(960, 520, 20, { restitution: 1.3}); 
+
+    const patation = Bodies.rectangle(910, 440, 680, 20, {
       isStatic: true,
-      angle: -Math.PI / 7,
-      restitution: 0.8
+      angle: Math.PI / 2,
+      restitution: 0
     });
+    Composite.add(engine.world, [wallTop, ball, wallLeft,wallRight, wallBottom,patation]);
 
-    Composite.add(engine.world, [ground, chimney3, chimney4, chimney5, chimney6]);
-
-    World.add(engine.world, [ground, chimney3, chimney4, chimney5, chimney6]);
+    World.add(engine.world, [wallTop, ball, wallLeft,wallRight, wallBottom,patation]);
 
     Engine.run(engine);
     Render.run(render);
@@ -64,5 +61,5 @@ export default function Wall() {
       };
     }, []);
   
-    return <div id="matter-js-canvas" />;
+    return<div id="matter-js-canvas" />;
   }
