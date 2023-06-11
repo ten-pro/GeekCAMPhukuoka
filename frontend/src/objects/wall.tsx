@@ -49,7 +49,7 @@ export default function Wall() {
           yScale:0.4
         }
       },
-       restitution: 1.3
+       restitution: 1.2
       }); //ボール
     const patation = Bodies.rectangle(910, 470, 630, 20, {
       isStatic: true,
@@ -65,9 +65,13 @@ export default function Wall() {
       angle: 4,
       restitution: 1
     });//右上の斜めの図形
-    const object1 = Bodies.rectangle(750, 750, 70, 70, {
+    const object1 = Bodies.rectangle(300, 150, 70, 70, {
       isStatic: true,
-      restitution: 1
+      restitution: 1,
+      angle: 0.8,
+      render: {
+        fillStyle: 'red'
+      }
     });
     const object2 = Bodies.rectangle(450, 750, 70, 70, {
       isStatic: true,
@@ -78,27 +82,27 @@ export default function Wall() {
       { x: 420, y: 100 },
       { x: 450, y: 300 },
       { x: 400, y: 300 }
-  ];
+  ];//左の弾くやつの図形構成
   const trapezoidVertices2 = [
     { x: 400, y: 100 },
     { x: 420, y: 100 },
     { x: 450, y: 300 },
     { x: 400, y: 300 }
-];
+];//右の弾くやつの図形構成
   const trapezoid1 = Bodies.fromVertices(300, 600, [trapezoidVertices1], {
       isStatic: true,
       angle: 2,
       render: {
           fillStyle: '#FFFFFF'
       }
-  }, true);
+  }, true);//左の弾くやつのオブジェクト
   const trapezoid2 = Bodies.fromVertices(600, 600, [trapezoidVertices2], {
     isStatic: true,
     angle: 4.4,
     render: {
         fillStyle: '#FFFFFF'
     }
-}, true);
+}, true);//右の弾くやつのオブジェクト
   render.canvas.addEventListener('mousedown', (event) => {
     const mousePosition = { x: event.clientX, y: event.clientY };
     if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
@@ -126,7 +130,7 @@ export default function Wall() {
 
             Body.setAngle(trapezoid1, angle);
         }, 10); // 20ミリ秒ごとに角度を更新
-    }
+    }//左の弾くアニメーション
     if (Vertices.contains(trapezoid2.vertices, mousePosition)) {
 
       let angle = 4.4;
@@ -149,7 +153,7 @@ export default function Wall() {
 
           Body.setAngle(trapezoid2, angle);
       }, 10);
-  }
+  }//右の弾くアニメーション
 });
 
 
@@ -190,14 +194,21 @@ export default function Wall() {
         }
       });
     });//オブジェクトが衝突し終わった時の処理
+    Events.on(engine, 'afterUpdate', () => {
+      // ボールが地面から1000px以上離れているか確認
+      if (ball.position.y < wallBottom.position.y - 795) {
+        setGameOver(true);
+      }
+    });//ボールが10000px以上離れたらゲームオーバー
+    
     Events.on(engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
         if ((pair.bodyA === ball && pair.bodyB === wallBottom) || (pair.bodyA === wallBottom && pair.bodyB === ball)) {
           setGameOver(true);
-          // setScore(points);
         }
       });
-    });//地面と接触した時のゲームオーバー処理
+    });
+    //地面と接触した時のゲームオーバー処理
 const mouseLauncher = Mouse.create(render.canvas);//発射台のクリック検知
 render.canvas.addEventListener("mousedown", event => {
   const { x, y } = mouseLauncher.position;
@@ -248,17 +259,14 @@ render.canvas.addEventListener("mousedown", event => {
           requestAnimationFrame(reverseAnimationFrame);
         }
       };
-
       requestAnimationFrame(reverseAnimationFrame);
     };
-
     requestAnimationFrame(animationFrame);
   }
 });//発射台のクリックイベント、アニメーション
 
     return () => {
         Engine.clear(engine);
-  
         if (render.canvas && render.canvas.parentNode) {
           render.canvas.parentNode.removeChild(render.canvas);
         }
