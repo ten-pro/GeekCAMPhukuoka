@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Engine, Render, World, Bodies, Composite, Mouse, Body, Events } from 'matter-js';
+import { Engine, Render, World, Bodies, Composite, Mouse, Body, Events, MouseConstraint, Vertices } from 'matter-js';
 
 
 export default function Wall() {
   const [points, setPoints] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false); 
   const isColliding = useRef<boolean>(false); 
+  const [score, setScore] = useState<number>(0);
     useEffect(() => {
         const engine = Engine.create();
         engine.timing.timeScale = 0.5;//重力
@@ -40,8 +41,16 @@ export default function Wall() {
       isStatic: true,
       restitution: 0
     });//地面
-    const ball = Bodies.circle(960, 520, 20, { restitution: 1.3}); //ボール
-
+    const ball = Bodies.circle(960, 520, 20, {
+      render: {
+        sprite: {
+          texture: './images/ball.png',
+          xScale:0.4,
+          yScale:0.4
+        }
+      },
+       restitution: 1.3
+      }); //ボール
     const patation = Bodies.rectangle(910, 470, 630, 20, {
       isStatic: true,
       angle: Math.PI / 2,
@@ -60,12 +69,94 @@ export default function Wall() {
       isStatic: true,
       restitution: 1
     });
-    const object2 = Bodies.rectangle(650, 750, 70, 70, {
+    const object2 = Bodies.rectangle(450, 750, 70, 70, {
       isStatic: true,
       restitution: 1
     });
-    Composite.add(engine.world, [object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
-    World.add(engine.world, [object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    const trapezoidVertices1 = [
+      { x: 400, y: 100 },
+      { x: 420, y: 100 },
+      { x: 450, y: 300 },
+      { x: 400, y: 300 }
+  ];
+  const trapezoidVertices2 = [
+    { x: 400, y: 100 },
+    { x: 420, y: 100 },
+    { x: 450, y: 300 },
+    { x: 400, y: 300 }
+];
+  const trapezoid1 = Bodies.fromVertices(300, 600, [trapezoidVertices1], {
+      isStatic: true,
+      angle: 2,
+      render: {
+          fillStyle: '#FFFFFF'
+      }
+  }, true);
+  const trapezoid2 = Bodies.fromVertices(600, 600, [trapezoidVertices2], {
+    isStatic: true,
+    angle: 4.4,
+    render: {
+        fillStyle: '#FFFFFF'
+    }
+}, true);
+  render.canvas.addEventListener('mousedown', (event) => {
+    const mousePosition = { x: event.clientX, y: event.clientY };
+    if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
+        
+        let angle = 2.0;
+        const endAngle = 1.0;
+        const step = 0.05;
+        let decreasing = true;
+
+        const intervalId = setInterval(() => {
+            // 角度を減らす
+            if (decreasing) {
+                angle -= step;
+                if (angle <= endAngle) {
+                    decreasing = false;
+                }
+            } 
+            // 角度を増やす
+            else {
+                angle += step;
+                if (angle >= 2.0) {
+                    clearInterval(intervalId);
+                }
+            }
+
+            Body.setAngle(trapezoid1, angle);
+        }, 10); // 20ミリ秒ごとに角度を更新
+    }
+    if (Vertices.contains(trapezoid2.vertices, mousePosition)) {
+
+      let angle = 4.4;
+      const endAngle = 5.4;
+      const step = 0.05;
+      let increasing = true;
+
+      const intervalId2 = setInterval(() => {
+          if (increasing) {
+              angle += step;
+              if (angle >= endAngle) {
+                  increasing = false;
+              }
+          } else {
+              angle -= step;
+              if (angle <= 4.4) {
+                  clearInterval(intervalId2);
+              }
+          }
+
+          Body.setAngle(trapezoid2, angle);
+      }, 10);
+  }
+});
+
+
+  
+    
+    Composite.add(engine.world, [trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
 
     Engine.run(engine);
     Render.run(render);
@@ -103,14 +194,13 @@ export default function Wall() {
       event.pairs.forEach((pair) => {
         if ((pair.bodyA === ball && pair.bodyB === wallBottom) || (pair.bodyA === wallBottom && pair.bodyB === ball)) {
           setGameOver(true);
+          // setScore(points);
         }
       });
     });//地面と接触した時のゲームオーバー処理
-const mouse = Mouse.create(render.canvas);//発射台のクリック検知
-
-// Attach mouse down event
+const mouseLauncher = Mouse.create(render.canvas);//発射台のクリック検知
 render.canvas.addEventListener("mousedown", event => {
-  const { x, y } = mouse.position;
+  const { x, y } = mouseLauncher.position;
   if (
     x >= launcher.position.x - 35 &&
     x <= launcher.position.x + 35 &&
@@ -174,6 +264,11 @@ render.canvas.addEventListener("mousedown", event => {
         }
       };
     }, []);
+    useEffect(() => {
+      if (gameOver) {
+        setScore(points);
+      }
+    }, [gameOver]);
   
     return (
       <div>
@@ -181,6 +276,7 @@ render.canvas.addEventListener("mousedown", event => {
           <div style={{ display: 'flex' }}>
             {gameOver && <div>終了</div>}
             <div>Points: {points}</div>
+            {gameOver && <div>Final Score: {score}</div>}
           </div>
       </div>
     );
