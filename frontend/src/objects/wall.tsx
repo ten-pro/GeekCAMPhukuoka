@@ -10,7 +10,7 @@ export default function Wall() {
   const [score, setScore] = useState<number>(0);
     useEffect(() => {
         const engine = Engine.create();
-        engine.timing.timeScale = 0.5;//重力
+        engine.timing.timeScale = 1.2;//重力
         const canvasElement = document.getElementById('matter-js-canvas') as HTMLElement | null;
         const render = Render.create({
           element: canvasElement!,
@@ -39,7 +39,10 @@ export default function Wall() {
     });//右の壁
     const wallBottom = Bodies.rectangle(500, 830, 1100, 100, {
       isStatic: true,
-      restitution: 0
+      restitution: 0,
+      render: {
+        fillStyle: 'red',
+      }
     });//地面
     const ball = Bodies.circle(960, 520, 20, {
       render: {
@@ -49,7 +52,7 @@ export default function Wall() {
           yScale:0.4
         }
       },
-       restitution: 1.2
+       restitution: 1.3
       }); //ボール
     const patation = Bodies.rectangle(910, 470, 630, 20, {
       isStatic: true,
@@ -70,13 +73,75 @@ export default function Wall() {
       restitution: 1,
       angle: 0.8,
       render: {
+        sprite: {
+          texture: './images/amatti.png',
+          xScale:0.6,
+          yScale:0.6
+        },
         fillStyle: 'red'
       }
     });
-    const object2 = Bodies.rectangle(450, 750, 70, 70, {
+    const object2 = Bodies.rectangle(450, 350, 70, 70, {
       isStatic: true,
-      restitution: 1
+      restitution: 1,
+      angle: 0.8,
+      render: {
+        sprite: {
+          texture: './images/motu.png',
+          xScale:1,
+          yScale:1
+        },
+        fillStyle: 'blue'
+      }
     });
+    const object3 = Bodies.polygon(650, 150, 3, 45, {
+      isStatic: true,
+      restitution: 1,
+      render: {
+        sprite: {
+          texture: './images/ramen.png',
+          xScale:0.7,
+          yScale:0.6
+        },
+        fillStyle: 'pink'
+      }
+    });
+    const bottomLeft = Bodies.rectangle(140, 490, 180, 35, {
+      isStatic: true,
+      angle: 1.2,
+      restitution: 0,
+      render: {
+        sprite: {
+          texture: './images/mentai.png',
+          xScale:0.9,
+          yScale:0.9
+        }
+      }
+    });//左の斜め壁
+    const bottomRight = Bodies.rectangle(790, 490, 180, 35, {
+      isStatic: true,
+      angle: 2.0,
+      restitution: 0,
+      render: {
+        sprite: {
+          texture: './images/tower.png',
+          xScale:0.3,
+          yScale:0.3
+        }
+      }
+    });//右の斜め壁
+    const niwaka = Bodies.rectangle(840, 260, 130, 35, {
+      isStatic: true,
+      restitution: 0,
+      angle: -0.2,
+      render: {
+        sprite: {
+          texture: './images/niwaka.png',
+          xScale:0.3,
+          yScale:0.3
+        }
+      }
+    });//右の斜め壁
     const trapezoidVertices1 = [
       { x: 400, y: 100 },
       { x: 420, y: 100 },
@@ -89,20 +154,30 @@ export default function Wall() {
     { x: 450, y: 300 },
     { x: 400, y: 300 }
 ];//右の弾くやつの図形構成
-  const trapezoid1 = Bodies.fromVertices(300, 600, [trapezoidVertices1], {
+  const trapezoid1 = Bodies.fromVertices(300, 660, [trapezoidVertices1], {
       isStatic: true,
       angle: 2,
       render: {
-          fillStyle: '#FFFFFF'
+          fillStyle: '#FFFFFF',
+          // sprite: {
+          //   texture: './images/mentai.png',
+          //   xScale:0.9,
+          //   yScale:0.9
+          // }
       }
   }, true);//左の弾くやつのオブジェクト
-  const trapezoid2 = Bodies.fromVertices(600, 600, [trapezoidVertices2], {
+  const trapezoid2 = Bodies.fromVertices(600, 660, [trapezoidVertices2], {
     isStatic: true,
     angle: 4.4,
     render: {
         fillStyle: '#FFFFFF'
     }
 }, true);//右の弾くやつのオブジェクト
+Events.on(engine, 'beforeUpdate', () => {
+  const currentAngle = object3.angle;
+  const newAngle = currentAngle + 0.03;
+  Body.setAngle(object3, newAngle);
+});//ラーメン回転処理
   render.canvas.addEventListener('mousedown', (event) => {
     const mousePosition = { x: event.clientX, y: event.clientY };
     if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
@@ -159,8 +234,8 @@ export default function Wall() {
 
   
     
-    Composite.add(engine.world, [trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
-    World.add(engine.world, [trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    // Composite.add(engine.world, [object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
 
     Engine.run(engine);
     Render.run(render);
