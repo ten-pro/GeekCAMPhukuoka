@@ -106,6 +106,18 @@ export default function Wall() {
         fillStyle: 'pink'
       }
     });
+    const hiyoko = Bodies.polygon(150, 280, 3, 45, {
+      isStatic: true,
+      restitution: 1,
+      render: {
+        sprite: {
+          texture: './images/hiyoko.png',
+          xScale:0.7,
+          yScale:0.6
+        },
+        fillStyle: 'pink'
+      }
+    });
     const bottomLeft = Bodies.rectangle(140, 490, 180, 35, {
       isStatic: true,
       angle: 1.2,
@@ -178,6 +190,11 @@ Events.on(engine, 'beforeUpdate', () => {
   const newAngle = currentAngle + 0.03;
   Body.setAngle(object3, newAngle);
 });//ラーメン回転処理
+Events.on(engine, 'beforeUpdate', () => {
+  const currentAngle = hiyoko.angle;
+  const newAngle = currentAngle - 0.03;
+  Body.setAngle(hiyoko, newAngle);
+});//ひよこ饅頭回転処理
   render.canvas.addEventListener('mousedown', (event) => {
     const mousePosition = { x: event.clientX, y: event.clientY };
     if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
@@ -235,7 +252,7 @@ Events.on(engine, 'beforeUpdate', () => {
   
     
     // Composite.add(engine.world, [object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
-    World.add(engine.world, [niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
 
     Engine.run(engine);
     Render.run(render);
