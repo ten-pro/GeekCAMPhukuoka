@@ -153,7 +153,7 @@ const sensorCategory = 0x0002;
       render: {
         fillStyle: 'green'
       }
-    });
+    });//通過オブジェクト緑
     const object5 = Bodies.rectangle(950, 350, 100, 20, {
       isStatic: true,
       isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
@@ -162,9 +162,9 @@ const sensorCategory = 0x0002;
         mask: defaultCategory
       },
       render: {
-        fillStyle: 'green'
+        fillStyle: 'yellow'
       }
-    });
+    });//通過オブジェクト黄色
     const hiyoko = Bodies.polygon(150, 280, 3, 45, {
       isStatic: true,
       restitution: 1,
@@ -457,7 +457,7 @@ Events.on(engine, 'afterUpdate', () => {
         }
         isInsideObject5 = false;
     }
-});
+});//オブジェクト通過後加点処理
     return () => {
         Engine.clear(engine);
         if (render.canvas && render.canvas.parentNode) {
