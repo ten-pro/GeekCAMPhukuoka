@@ -73,11 +73,11 @@ export default function Wall() {
       restitution: 1,
       angle: 0.8,
       render: {
-        sprite: {
-          texture: './images/amatti.png',
-          xScale:0.6,
-          yScale:0.6
-        },
+        // sprite: {
+        //   texture: './images/amatti.png',
+        //   xScale:0.6,
+        //   yScale:0.6
+        // },
         fillStyle: 'red'
       }
     });
@@ -86,11 +86,11 @@ export default function Wall() {
       restitution: 1,
       angle: 0.8,
       render: {
-        sprite: {
-          texture: './images/motu.png',
-          xScale:1,
-          yScale:1
-        },
+        // sprite: {
+        //   texture: './images/motu.png',
+        //   xScale:1,
+        //   yScale:1
+        // },
         fillStyle: 'blue'
       }
     });
@@ -98,11 +98,11 @@ export default function Wall() {
       isStatic: true,
       restitution: 1,
       render: {
-        sprite: {
-          texture: './images/ramen.png',
-          xScale:0.7,
-          yScale:0.6
-        },
+        // sprite: {
+        //   texture: './images/ramen.png',
+        //   xScale:0.7,
+        //   yScale:0.6
+        // },
         fillStyle: 'pink'
       }
     });
@@ -110,11 +110,11 @@ export default function Wall() {
       isStatic: true,
       restitution: 1,
       render: {
-        sprite: {
-          texture: './images/hiyoko.png',
-          xScale:0.7,
-          yScale:0.6
-        },
+        // sprite: {
+        //   texture: './images/hiyoko.png',
+        //   xScale:0.7,
+        //   yScale:0.6
+        // },
         fillStyle: 'pink'
       }
     });
@@ -123,11 +123,11 @@ export default function Wall() {
       angle: 1.2,
       restitution: 0,
       render: {
-        sprite: {
-          texture: './images/mentai.png',
-          xScale:0.9,
-          yScale:0.9
-        }
+        // sprite: {
+        //   texture: './images/mentai.png',
+        //   xScale:0.9,
+        //   yScale:0.9
+        // }
       }
     });//左の斜め壁
     const bottomRight = Bodies.rectangle(790, 490, 180, 35, {
@@ -135,11 +135,11 @@ export default function Wall() {
       angle: 2.0,
       restitution: 0,
       render: {
-        sprite: {
-          texture: './images/tower.png',
-          xScale:0.3,
-          yScale:0.3
-        }
+        // sprite: {
+        //   texture: './images/tower.png',
+        //   xScale:0.3,
+        //   yScale:0.3
+        // }
       }
     });//右の斜め壁
     const niwaka = Bodies.rectangle(840, 260, 130, 35, {
@@ -147,11 +147,11 @@ export default function Wall() {
       restitution: 0,
       angle: -0.2,
       render: {
-        sprite: {
-          texture: './images/niwaka.png',
-          xScale:0.3,
-          yScale:0.3
-        }
+        // sprite: {
+        //   texture: './images/niwaka.png',
+        //   xScale:0.3,
+        //   yScale:0.3
+        // }
       }
     });//右の斜め壁
     const trapezoidVertices1 = [
@@ -171,18 +171,23 @@ export default function Wall() {
       angle: 2,
       render: {
           fillStyle: '#FFFFFF',
-          // sprite: {
-          //   texture: './images/mentai.png',
-          //   xScale:0.9,
-          //   yScale:0.9
-          // }
+          sprite: {
+            texture: './images/flip.png',
+            xScale:0.9,
+            yScale:0.9
+          }
       }
   }, true);//左の弾くやつのオブジェクト
   const trapezoid2 = Bodies.fromVertices(600, 660, [trapezoidVertices2], {
     isStatic: true,
     angle: 4.4,
     render: {
-        fillStyle: '#FFFFFF'
+        fillStyle: '#FFFFFF',
+        sprite: {
+          texture: './images/flip.png',
+          xScale:0.9,
+          yScale:0.9
+        }
     }
 }, true);//右の弾くやつのオブジェクト
 Events.on(engine, 'beforeUpdate', () => {
