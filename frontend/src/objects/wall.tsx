@@ -26,7 +26,6 @@ export default function Wall() {
       isStatic: true,
       restitution: 0
     });//上の壁
-    
     const wallLeft = Bodies.rectangle(-30, 405, 780, 100, {
       isStatic: true,
       angle: Math.PI / 2,
@@ -80,7 +79,7 @@ export default function Wall() {
         // },
         fillStyle: 'red'
       }
-    });
+    });//赤い四角のオブジェクト
     const object2 = Bodies.rectangle(450, 350, 70, 70, {
       isStatic: true,
       restitution: 1,
@@ -93,7 +92,7 @@ export default function Wall() {
         // },
         fillStyle: 'blue'
       }
-    });
+    });//青のオブジェクト
     const object3 = Bodies.polygon(650, 150, 3, 45, {
       isStatic: true,
       restitution: 1,
@@ -105,7 +104,7 @@ export default function Wall() {
         // },
         fillStyle: 'pink'
       }
-    });
+    });//三角のオブジェクト（ピンク）
     const hiyoko = Bodies.polygon(150, 280, 3, 45, {
       isStatic: true,
       restitution: 1,
@@ -115,9 +114,9 @@ export default function Wall() {
         //   xScale:0.7,
         //   yScale:0.6
         // },
-        fillStyle: 'pink'
+        fillStyle: 'orange'
       }
-    });
+    });//オレンジ色のオブジェクト
     const bottomLeft = Bodies.rectangle(140, 490, 180, 35, {
       isStatic: true,
       angle: 1.2,
@@ -252,16 +251,10 @@ Events.on(engine, 'beforeUpdate', () => {
       }, 10);
   }//右の弾くアニメーション
 });
-
-
-  
-    
     // Composite.add(engine.world, [object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
     World.add(engine.world, [hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
-
     Engine.run(engine);
     Render.run(render);
-
     Events.on(engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
         if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === object1) || (pair.bodyA === object1 && pair.bodyB === ball))) {
@@ -277,7 +270,7 @@ Events.on(engine, 'beforeUpdate', () => {
           isColliding.current = true;
         }
       });
-    });//オブジェクトが衝突した時の処理
+    });//オブジェクトが衝突検知処理
 
     Events.on(engine, 'collisionEnd', (event) => {
       event.pairs.forEach((pair) => {
@@ -290,22 +283,20 @@ Events.on(engine, 'beforeUpdate', () => {
           isColliding.current = false;
         }
       });
-    });//オブジェクトが衝突し終わった時の処理
+    });//オブジェクトが衝突して離れたのを検知する処理
     Events.on(engine, 'afterUpdate', () => {
       // ボールが地面から1000px以上離れているか確認
       if (ball.position.y < wallBottom.position.y - 795) {
         setGameOver(true);
       }
     });//ボールが10000px以上離れたらゲームオーバー
-    
     Events.on(engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
         if ((pair.bodyA === ball && pair.bodyB === wallBottom) || (pair.bodyA === wallBottom && pair.bodyB === ball)) {
           setGameOver(true);
         }
       });
-    });
-    //地面と接触した時のゲームオーバー処理
+    });//地面と接触した時のゲームオーバー処理
 const mouseLauncher = Mouse.create(render.canvas);//発射台のクリック検知
 render.canvas.addEventListener("mousedown", event => {
   const { x, y } = mouseLauncher.position;
@@ -361,7 +352,6 @@ render.canvas.addEventListener("mousedown", event => {
     requestAnimationFrame(animationFrame);
   }
 });//発射台のクリックイベント、アニメーション
-
     return () => {
         Engine.clear(engine);
         if (render.canvas && render.canvas.parentNode) {
@@ -377,8 +367,8 @@ render.canvas.addEventListener("mousedown", event => {
   
     return (
       <div>
+        <div style={{ display: 'flex' }}>
         <div id="matter-js-canvas"></div>
-          <div style={{ display: 'flex' }}>
             {gameOver && <div>終了</div>}
             <div>Points: {points}</div>
             {gameOver && <div>Final Score: {score}</div>}
