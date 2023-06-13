@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from '@/styles/start.module.css';
-
+import { useEffect } from 'react'
 const Start: React.FC = () => {
+  useEffect(() => {
+    localStorage.setItem('key', 'score');
+  }, []);//ローカルストレージ格納処理
+
+
   return (
     <div>
       <img className={styles['background-image']} src="./image/start.svg" alt="Background Image" />

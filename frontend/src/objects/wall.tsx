@@ -8,6 +8,11 @@ export default function Wall() {
   const [gameOver, setGameOver] = useState<boolean>(false); 
   const isColliding = useRef<boolean>(false); 
   const [score, setScore] = useState<number>(0);
+  const [storedValue, setStoredValue] = useState<string | null>(null);//ローカルストレージで使う変数
+  useEffect(() => {
+    const value = localStorage.getItem('key');
+    setStoredValue(value);
+  }, []);//ローカルストレージ取得
   let isInsideObject4 = false;
   let isInsideObject5 = false;
   const defaultCategory = 0x0001;
@@ -478,6 +483,7 @@ Events.on(engine, 'afterUpdate', () => {
             {gameOver && <div>終了</div>}
             <div>Points: {points}</div>
             {gameOver && <div>Final Score: {score}</div>}
+            {storedValue && <p>ローカルストレージから取得したデータ: {storedValue}</p>}
           </div>
       </div>
     );
