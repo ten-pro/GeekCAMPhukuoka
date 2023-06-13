@@ -388,7 +388,7 @@ render.canvas.addEventListener("mousedown", event => {
     let startTime = Date.now();
     const duration = 1000; // 2 seconds
     const initialY = launcher.position.y;
-    const targetY = 200;
+    const targetY = 100;
 
     const animationFrame = () => {
       const currentTime = Date.now();
