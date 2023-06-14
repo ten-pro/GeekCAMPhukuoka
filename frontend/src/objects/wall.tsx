@@ -32,19 +32,23 @@ const sensorCategory = 0x0002;
           }
         });//Matterjsの描画範囲
 
-                // 曲線を構成する円のパラメータ
-                const centerX = render.options?.width ? render.options.width / 3.3 : 0; // 画面中央のx座標
-                const centerY = render.options?.height ? render.options.height / 2.6 : 0; // 画面中央のy座標
-                const radius = 290; // 円の半径
-                const numCircles = 220; // 曲線上の円の数
-        // 曲線を構築する
+        const centerX = render.options?.width ? render.options.width / 3.3 : 0;
+        const centerY = render.options?.height ? render.options.height / 2.6 : 0;
+        const radius = 290;
+        const numCircles = 220;
+        
+        // 移動させるオフセットを定義
+        const offsetX = 90; // X軸方向に移動させる距離
+        const offsetY = 30; // Y軸方向に移動させる距離
+        
         var angleStep = Math.PI / numCircles;
         var circles = [];
         
         for (var i = 0; i < numCircles; i++) {
             var angle = angleStep * i;
-            var x = centerX + Math.cos(angle) * radius;
-            var y = centerY - Math.sin(angle) * radius;
+            // オフセットを加えて座標を計算
+            var x = centerX + Math.cos(angle) * radius + offsetX;
+            var y = centerY - Math.sin(angle) * radius + offsetY;
             var circle = Bodies.circle(x, y, 5, {
                 isStatic: true,
                 render: {
@@ -55,11 +59,12 @@ const sensorCategory = 0x0002;
             });
             circles.push(circle);
         }
-        // 曲線を追加
-        Composite.add(engine.world, circles);
-
-
         
+        Composite.add(engine.world, circles);
+        
+
+
+
     const wallTop = Bodies.rectangle(500, -30, 1000, 100, {
       isStatic: true,
       collisionFilter: {
