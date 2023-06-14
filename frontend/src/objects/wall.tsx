@@ -31,6 +31,35 @@ const sensorCategory = 0x0002;
             background: 'gray' 
           }
         });//Matterjsの描画範囲
+
+                // 曲線を構成する円のパラメータ
+                const centerX = render.options?.width ? render.options.width / 3.3 : 0; // 画面中央のx座標
+                const centerY = render.options?.height ? render.options.height / 2.6 : 0; // 画面中央のy座標
+                const radius = 290; // 円の半径
+                const numCircles = 220; // 曲線上の円の数
+        // 曲線を構築する
+        var angleStep = Math.PI / numCircles;
+        var circles = [];
+        
+        for (var i = 0; i < numCircles; i++) {
+            var angle = angleStep * i;
+            var x = centerX + Math.cos(angle) * radius;
+            var y = centerY - Math.sin(angle) * radius;
+            var circle = Bodies.circle(x, y, 5, {
+                isStatic: true,
+                render: {
+                    fillStyle: 'black',
+                    strokeStyle: 'black',
+                    lineWidth: 1
+                }
+            });
+            circles.push(circle);
+        }
+        // 曲線を追加
+        Composite.add(engine.world, circles);
+
+
+        
     const wallTop = Bodies.rectangle(500, -30, 1000, 100, {
       isStatic: true,
       collisionFilter: {
