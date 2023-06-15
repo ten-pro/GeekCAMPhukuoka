@@ -418,6 +418,28 @@ const bottomRight2 = Bodies.rectangle(590, 845, 100, 5, {
     // }
   }
 });//右の白線
+const bottomRight3 = Bodies.rectangle(100, 640, 40, 10, {
+  isStatic: true,
+  angle: 1.6,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  restitution: 0,
+  render: {
+    fillStyle:'#fefefe',
+    sprite: {
+      texture: './images/object5.png',
+      xScale:1.2,
+      yScale:1.2
+    }
+  }
+});//左の点オブジェクト
+
+
+
+
+
+
 // Events.on(engine, 'beforeUpdate', () => {
 //   const currentAngle = object3.angle;
 //   const newAngle = currentAngle + 0.03;
@@ -480,7 +502,7 @@ const bottomRight2 = Bodies.rectangle(590, 845, 100, 5, {
       }, 10);
   }//右の弾くアニメーション
 });
-    World.add(engine.world, [bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
