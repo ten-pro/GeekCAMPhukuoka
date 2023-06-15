@@ -25,86 +25,95 @@ const sensorCategory = 0x0002;
           element: canvasElement!,
           engine: engine,
           options: {
-            width: 1000,
-            height: 800,
+            width: 700,
+            height: 950,
             wireframes: false,
             background: 'gray' 
           }
         });//Matterjsの描画範囲
 
-        const centerX = render.options?.width ? render.options.width / 3.3 : 0;
-        const centerY = render.options?.height ? render.options.height / 2.6 : 0;
-        const radius = 290;
-        const numCircles = 220;
-        
-        // 移動させるオフセットを定義
-        const offsetX = 90; // X軸方向に移動させる距離
-        const offsetY = 30; // Y軸方向に移動させる距離
-        
-        var angleStep = Math.PI / numCircles;
-        var circles = [];
-        
-        for (var i = 0; i < numCircles; i++) {
-            var angle = angleStep * i;
-            // オフセットを加えて座標を計算
-            var x = centerX + Math.cos(angle) * radius + offsetX;
-            var y = centerY - Math.sin(angle) * radius + offsetY;
-            var circle = Bodies.circle(x, y, 5, {
-                isStatic: true,
-                render: {
-                    fillStyle: 'black',
-                    strokeStyle: 'black',
-                    lineWidth: 1
-                }
-            });
-            circles.push(circle);
+// オブジェクト↓↓↓
+
+//半円オブジェクト
+    // 中心のX座標を計算します。render.options.widthが存在する場合はその値を使用し、存在しない場合は0を使用します。
+const centerX = render.options?.width ? render.options.width / 3.3 : 0;
+// 中心のY座標を計算します。render.options.heightが存在する場合はその値を使用し、存在しない場合は0を使用します。
+const centerY = render.options?.height ? render.options.height / 2.6 : 0;
+// 曲線を構成する円の半径を設定します。
+const radius = 500;
+// 曲線を構成する円の数を設定します。
+const numCircles = 300;
+// X軸とY軸方向のオフセットを設定します。これにより、曲線の位置を調整します。
+const offsetX = 140;
+const offsetY = 140;
+// 円の開始角度を設定します。これにより、曲線の形状を調整します。
+const angleOffset = Math.PI / 4;
+// 角度のステップサイズを計算します。これは、各円の位置を計算するために使用されます。
+const angleStep = Math.PI / (2 * numCircles);
+// 曲線を構成する円を格納する配列を作成します。
+const circles = [];
+// 各円の位置を計算して、配列に追加します。
+for (var i = 0; i < numCircles; i++) {
+    // 現在の角度を計算します。
+    var angle = angleStep * i + angleOffset;
+    // 円のX座標を計算します。
+    var x = centerX + Math.cos(angle) * radius + offsetX;
+    // 円のY座標を計算します。
+    var y = centerY - Math.sin(angle) * radius + offsetY;
+    // 円を作成します。
+    var circle = Bodies.circle(x, y, 5, {
+        isStatic: true,
+        render: {
+            fillStyle: '#ff2f2f',
+            strokeStyle: '#ff2f2f',
+            lineWidth: 1
         }
-        
-        Composite.add(engine.world, circles);
-        
+    });
+    // 配列に円を追加します。
+    circles.push(circle);
+}//半円作成処理
 
 
-
-    const wallTop = Bodies.rectangle(500, -30, 1000, 100, {
-      isStatic: true,
-      collisionFilter: {
-        category: defaultCategory // デフォルトカテゴリーに設定
-    },
-      restitution: 0
-    });//上の壁
-    const wallLeft = Bodies.rectangle(-30, 405, 780, 100, {
+    const wallLeft = Bodies.rectangle(10, 540, 800, 10, {
       isStatic: true,
       angle: Math.PI / 2,
       collisionFilter: {
-        category: defaultCategory // デフォルトカテゴリーに設定
+        category: defaultCategory
+    },
+    render: {
+      fillStyle: '#ff2f2f'
     },
       restitution: 0
     });//左の壁
-    const wallRight = Bodies.rectangle(1030, 400, 765, 100, {
+    const wallRight = Bodies.rectangle(690, 540, 805, 10, {
       isStatic: true,
       angle: Math.PI / 2,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
+    render: {
+      fillStyle: '#ff2f2f'
+    },
       restitution: 0
     });//右の壁
-    const wallBottom = Bodies.rectangle(500, 830, 1100, 100, {
+    const wallBottom = Bodies.rectangle(500, 930, 1100, 10, {
       isStatic: true,
       restitution: 0,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       render: {
-        fillStyle: 'red',
+        // fillStyle: 'transparent',
+        fillStyle: 'blue',
       }
     });//地面
-    const ball = Bodies.circle(960, 520, 20, {
+    const ball = Bodies.circle(660, 520, 10, {
       render: {
-        sprite: {
-          texture: './images/ball.png',
-          xScale:0.4,
-          yScale:0.4
-        }
+        // sprite: {
+        //   texture: './images/ball.png',
+        //   xScale:0.4,
+        //   yScale:0.4
+        // }
       },
        restitution: 1.3
       }); //ボール
@@ -112,33 +121,42 @@ const sensorCategory = 0x0002;
         category: defaultCategory,
         mask: defaultCategory // デフォルトカテゴリーとのみ衝突
     };//ボールに対してcollisionFilterを設定
-    const patation = Bodies.rectangle(910, 470, 630, 20, {
+    const patation = Bodies.rectangle(640, 560, 770, 10, {
       isStatic: true,
       angle: Math.PI / 2,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
+    render: {
+      fillStyle: '#ff2f2f'
+    },
       restitution: 0
     });//発射台の左の壁
-    const launcher = Bodies.rectangle(950, 750, 70, 70, {
+    const launcher = Bodies.rectangle(665, 900, 40, 40, {
       isStatic: true,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
-      restitution: 2
+    render: {
+      fillStyle: '#ff2f2f'
+    },
+      restitution: 0
     });//発射台、真四角の図形
-    const diagonal = Bodies.rectangle(950, 70, 150, 20, {
+    const diagonal = Bodies.rectangle(600, 150, 100, 10, {
       isStatic: true,
-      angle: 4,
+      angle: 3.8,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
-      restitution: 1
-    });//右上の斜めの図形
-    const object1 = Bodies.rectangle(300, 150, 70, 70, {
+    render: {
+      fillStyle: '#ff2f2f'
+    },
+      restitution: 0
+    });//右上の斜めの図形1
+    const object1 = Bodies.rectangle(520, 105, 100, 10, {
       isStatic: true,
-      restitution: 1,
-      angle: 0.8,
+      restitution: 0,
+      angle: 3.5,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
@@ -150,90 +168,120 @@ const sensorCategory = 0x0002;
         // },
         fillStyle: 'red'
       }
-    });//赤い四角のオブジェクト
-    const object2 = Bodies.rectangle(450, 350, 70, 70, {
+    });//右上の斜めの図形2
+    const object2 = Bodies.rectangle(400, 150, 50, 10, {
       isStatic: true,
-      restitution: 1,
+      restitution: 0,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
-      angle: 0.8,
+      angle: 1.6,
       render: {
-        // sprite: {
-        //   texture: './images/motu.png',
-        //   xScale:1,
-        //   yScale:1
-        // },
+        sprite: {
+          texture: './images/red.png',
+          xScale:1,
+          yScale:1
+        },
         fillStyle: 'blue'
       }
-    });//青のオブジェクト
-    const object3 = Bodies.polygon(650, 150, 3, 45, {
+    });//赤いランプ1
+    const object6 = Bodies.rectangle(350, 150, 50, 10, {
+      isStatic: true,
+      restitution: 0,
+      collisionFilter: {
+        category: defaultCategory // デフォルトカテゴリーに設定
+    },
+      angle: 1.6,
+      render: {
+        sprite: {
+          texture: './images/red.png',
+          xScale:1,
+          yScale:1
+        },
+        fillStyle: 'blue'
+      }
+    });//赤いランプ2
+    const object3 = Bodies.rectangle(250, 150, 40, 40, {
       isStatic: true,
       restitution: 1,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       render: {
-        // sprite: {
-        //   texture: './images/ramen.png',
-        //   xScale:0.7,
-        //   yScale:0.6
-        // },
+        sprite: {
+          texture: './images/object1.png',
+          xScale:1.2,
+          yScale:1.2
+        },
         fillStyle: 'pink'
       }
-    });//三角のオブジェクト（ピンク）
-    const object4 = Bodies.rectangle(350, 400, 100, 20, {
+    });//左上オブジェクト
+    const hiyoko = Bodies.circle(130, 130, 15, {
       isStatic: true,
-      isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
-      collisionFilter: {
-        category: sensorCategory,
-        mask: defaultCategory
-      },
-      render: {
-        fillStyle: 'green'
-      }
-    });//通過オブジェクト緑
-    const object5 = Bodies.rectangle(950, 350, 100, 20, {
-      isStatic: true,
-      isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
-      collisionFilter: {
-        category: sensorCategory,
-        mask: defaultCategory
-      },
-      render: {
-        fillStyle: 'yellow'
-      }
-    });//通過オブジェクト黄色
-    const hiyoko = Bodies.polygon(150, 280, 3, 45, {
-      isStatic: true,
-      restitution: 1,
+      restitution: 0,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       render: {
-        // sprite: {
-        //   texture: './images/hiyoko.png',
-        //   xScale:0.7,
-        //   yScale:0.6
-        // },
+        sprite: {
+          texture: './images/object2.png',
+          xScale:1,
+          yScale:1
+        },
         fillStyle: 'orange'
       }
-    });//オレンジ色のオブジェクト
-    const bottomLeft = Bodies.rectangle(140, 490, 180, 35, {
+    });//緑のオブジェクト
+    const bottomLeft = Bodies.rectangle(250, 190, 70, 10, {
       isStatic: true,
-      angle: 1.2,
+      angle: 6.3,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       restitution: 0,
       render: {
-        // sprite: {
-        //   texture: './images/mentai.png',
-        //   xScale:0.9,
-        //   yScale:0.9
-        // }
+        sprite: {
+          texture: './images/object3.png',
+          xScale:1,
+          yScale:1
+        }
       }
-    });//左の斜め壁
+    });//左上のオブジェクトの下の黄色
+    const object4 = Bodies.rectangle(100, 300, 30, 10, {
+      isStatic: true,
+      isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
+      angle: 0.1,
+      collisionFilter: {
+        category: sensorCategory,
+        mask: defaultCategory
+      },
+      render: {
+        fillStyle: 'green',
+        sprite: {
+          texture: './images/purple.png',
+          xScale:1,
+          yScale:1
+        }
+      }
+    });//通過オブジェクト紫
+    const object5 = Bodies.rectangle(110, 330, 40, 10, {
+      isStatic: true,
+      isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
+      angle: 3.1,
+      collisionFilter: {
+        category: sensorCategory,
+        mask: defaultCategory
+      },
+      render: {
+        fillStyle: 'yellow',
+        sprite: {
+          texture: './images/red2.png',
+          xScale:1.1,
+          yScale:1.1
+        }
+      }
+    });//通過オブジェクト黄色
+    
+
     const bottomRight = Bodies.rectangle(790, 490, 180, 35, {
       isStatic: true,
       angle: 2.0,
@@ -306,16 +354,16 @@ const sensorCategory = 0x0002;
         }
     }
 }, true);//右の弾くやつのオブジェクト
-Events.on(engine, 'beforeUpdate', () => {
-  const currentAngle = object3.angle;
-  const newAngle = currentAngle + 0.03;
-  Body.setAngle(object3, newAngle);
-});//ラーメン回転処理
-Events.on(engine, 'beforeUpdate', () => {
-  const currentAngle = hiyoko.angle;
-  const newAngle = currentAngle - 0.03;
-  Body.setAngle(hiyoko, newAngle);
-});//ひよこ饅頭回転処理
+// Events.on(engine, 'beforeUpdate', () => {
+//   const currentAngle = object3.angle;
+//   const newAngle = currentAngle + 0.03;
+//   Body.setAngle(object3, newAngle);
+// });//ラーメン回転処理
+// Events.on(engine, 'beforeUpdate', () => {
+//   const currentAngle = hiyoko.angle;
+//   const newAngle = currentAngle - 0.03;
+//   Body.setAngle(hiyoko, newAngle);
+// });//ひよこ饅頭回転処理
   render.canvas.addEventListener('mousedown', (event) => {
     const mousePosition = { x: event.clientX, y: event.clientY };
     if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
@@ -368,8 +416,7 @@ Events.on(engine, 'beforeUpdate', () => {
       }, 10);
   }//右の弾くアニメーション
 });
-    // Composite.add(engine.world, [object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom,patation, diagonal, launcher]);//オブジェクトを追加したら編集
-    World.add(engine.world, [object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, wallTop, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
@@ -425,9 +472,9 @@ render.canvas.addEventListener("mousedown", event => {
   ) {
     // Animate launcher position
     let startTime = Date.now();
-    const duration = 1000; // 2 seconds
+    const duration = 200; // 2 seconds
     const initialY = launcher.position.y;
-    const targetY = 100;
+    const targetY = 400;
 
     const animationFrame = () => {
       const currentTime = Date.now();
