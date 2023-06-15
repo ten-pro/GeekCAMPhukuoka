@@ -275,48 +275,80 @@ for (var i = 0; i < numCircles; i++) {
         fillStyle: 'yellow',
         sprite: {
           texture: './images/red2.png',
+          xScale:1.2,
+          yScale:1.3
+        }
+      }
+    });//通過オブジェクト赤
+    const object7 = Bodies.rectangle(130, 370, 40, 10, {
+      isStatic: true,
+      isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
+      angle: 2.9,
+      collisionFilter: {
+        category: sensorCategory,
+        mask: defaultCategory
+      },
+      render: {
+        fillStyle: 'yellow',
+        sprite: {
+          texture: './images/objectq.png',
+          xScale:1.3,
+          yScale:1.3
+        }
+      }
+    });//通過オブジェクト黄色1
+    const object8 = Bodies.rectangle(160, 400, 40, 10, {
+      isStatic: true,
+      isSensor: true, // センサーとして働くため、物理的な衝突は発生しない
+      angle: 2.7,
+      collisionFilter: {
+        category: sensorCategory,
+        mask: defaultCategory
+      },
+      render: {
+        fillStyle: 'yellow',
+        sprite: {
+          texture: './images/objectw.png',
           xScale:1.1,
           yScale:1.1
         }
       }
-    });//通過オブジェクト黄色
-    
-
-    const bottomRight = Bodies.rectangle(790, 490, 180, 35, {
+    });//通過オブジェクト黄色2
+    const bottomRight = Bodies.rectangle(50, 450, 50, 10, {
       isStatic: true,
-      angle: 2.0,
+      angle: 1.6,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       restitution: 0,
       render: {
-        // sprite: {
-        //   texture: './images/tower.png',
-        //   xScale:0.3,
-        //   yScale:0.3
-        // }
+        sprite: {
+          texture: './images/red.png',
+          xScale:1.2,
+          yScale:1.2
+        }
       }
-    });//右の斜め壁
-    const niwaka = Bodies.rectangle(840, 260, 130, 35, {
+    });//左のランプ
+    const niwaka = Bodies.rectangle(100, 450, 50, 10, {
       isStatic: true,
       restitution: 0,
-      angle: -0.2,
+      angle: 1.6,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       render: {
-        // sprite: {
-        //   texture: './images/niwaka.png',
-        //   xScale:0.3,
-        //   yScale:0.3
-        // }
+        sprite: {
+          texture: './images/red.png',
+          xScale:1.2,
+          yScale:1.2
+        }
       }
-    });//右の斜め壁
+    });//左のランプ2
     const trapezoidVertices1 = [
-      { x: 400, y: 100 },
+      { x: 410, y: 100 },
       { x: 430, y: 100 },
-      { x: 460, y: 300 },
-      { x: 400, y: 300 }
+      { x: 450, y: 250 },
+      { x: 410, y: 250 }
   ];//左の弾くやつの図形構成
   const trapezoidVertices2 = [
     { x: 390, y: 100 },
@@ -324,7 +356,7 @@ for (var i = 0; i < numCircles; i++) {
     { x: 450, y: 300 },
     { x: 390, y: 300 }
 ];//右の弾くやつの図形構成
-  const trapezoid1 = Bodies.fromVertices(300, 660, [trapezoidVertices1], {
+  const trapezoid1 = Bodies.fromVertices(200, 660, [trapezoidVertices1], {
       isStatic: true,
       angle: 2,
       collisionFilter: {
@@ -332,11 +364,11 @@ for (var i = 0; i < numCircles; i++) {
     },
       render: {
           fillStyle: '#FFFFFF',
-          sprite: {
-            texture: './images/flipLeft.png',
-            xScale:0.9,
-            yScale:0.9
-          }
+          // sprite: {
+          //   texture: './images/flipLeft.png',
+          //   xScale:0.9,
+          //   yScale:0.9
+          // }
       }
   }, true);//左の弾くやつのオブジェクト
   const trapezoid2 = Bodies.fromVertices(600, 660, [trapezoidVertices2], {
@@ -347,11 +379,11 @@ for (var i = 0; i < numCircles; i++) {
   },
     render: {
         fillStyle: '#FFFFFF',
-        sprite: {
-          texture: './images/flipRight.png',
-          xScale:0.9,
-          yScale:0.9
-        }
+        // sprite: {
+        //   texture: './images/flipRight.png',
+        //   xScale:0.9,
+        //   yScale:0.9
+        // }
     }
 }, true);//右の弾くやつのオブジェクト
 // Events.on(engine, 'beforeUpdate', () => {
@@ -416,7 +448,7 @@ for (var i = 0; i < numCircles; i++) {
       }, 10);
   }//右の弾くアニメーション
 });
-    World.add(engine.world, [object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
