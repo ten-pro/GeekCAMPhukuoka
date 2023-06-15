@@ -345,18 +345,18 @@ for (var i = 0; i < numCircles; i++) {
       }
     });//左のランプ2
     const trapezoidVertices1 = [
-      { x: 410, y: 100 },
-      { x: 430, y: 100 },
+      { x: 415, y: 100 },
+      { x: 425, y: 100 },
       { x: 450, y: 250 },
       { x: 410, y: 250 }
   ];//左の弾くやつの図形構成
   const trapezoidVertices2 = [
-    { x: 390, y: 100 },
-    { x: 420, y: 100 },
-    { x: 450, y: 300 },
-    { x: 390, y: 300 }
+    { x: 395, y: 100 },
+    { x: 405, y: 100 },
+    { x: 430, y: 250 },
+    { x: 400, y: 250 }
 ];//右の弾くやつの図形構成
-  const trapezoid1 = Bodies.fromVertices(200, 660, [trapezoidVertices1], {
+  const trapezoid1 = Bodies.fromVertices(250, 860, [trapezoidVertices1], {
       isStatic: true,
       angle: 2,
       collisionFilter: {
@@ -364,14 +364,14 @@ for (var i = 0; i < numCircles; i++) {
     },
       render: {
           fillStyle: '#FFFFFF',
-          // sprite: {
-          //   texture: './images/flipLeft.png',
-          //   xScale:0.9,
-          //   yScale:0.9
-          // }
+          sprite: {
+            texture: './images/flipLeft.png',
+            xScale:0.7,
+            yScale:0.7
+          }
       }
   }, true);//左の弾くやつのオブジェクト
-  const trapezoid2 = Bodies.fromVertices(600, 660, [trapezoidVertices2], {
+  const trapezoid2 = Bodies.fromVertices(470, 870, [trapezoidVertices2], {
     isStatic: true,
     angle: 4.4,
     collisionFilter: {
@@ -379,13 +379,45 @@ for (var i = 0; i < numCircles; i++) {
   },
     render: {
         fillStyle: '#FFFFFF',
-        // sprite: {
-        //   texture: './images/flipRight.png',
-        //   xScale:0.9,
-        //   yScale:0.9
-        // }
+        sprite: {
+          texture: './images/flipRight.png',
+          xScale:0.7,
+          yScale:0.7
+        }
     }
 }, true);//右の弾くやつのオブジェクト
+const bottomRight1 = Bodies.rectangle(90, 800, 250, 5, {
+  isStatic: true,
+  angle: 3.6,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  restitution: 0,
+  render: {
+    fillStyle:'#fefefe'
+    // sprite: {
+    //   texture: './images/red.png',
+    //   xScale:1.2,
+    //   yScale:1.2
+    // }
+  }
+});//左の白線
+const bottomRight2 = Bodies.rectangle(590, 845, 100, 5, {
+  isStatic: true,
+  angle: 2.8,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  restitution: 0,
+  render: {
+    fillStyle:'#fefefe'
+    // sprite: {
+    //   texture: './images/red.png',
+    //   xScale:1.2,
+    //   yScale:1.2
+    // }
+  }
+});//右の白線
 // Events.on(engine, 'beforeUpdate', () => {
 //   const currentAngle = object3.angle;
 //   const newAngle = currentAngle + 0.03;
@@ -448,7 +480,7 @@ for (var i = 0; i < numCircles; i++) {
       }, 10);
   }//右の弾くアニメーション
 });
-    World.add(engine.world, [object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
@@ -504,7 +536,7 @@ render.canvas.addEventListener("mousedown", event => {
   ) {
     // Animate launcher position
     let startTime = Date.now();
-    const duration = 200; // 2 seconds
+    const duration = 1000; // 2 seconds
     const initialY = launcher.position.y;
     const targetY = 400;
 
