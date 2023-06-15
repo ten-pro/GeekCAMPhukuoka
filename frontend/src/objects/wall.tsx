@@ -107,7 +107,7 @@ for (var i = 0; i < numCircles; i++) {
         fillStyle: 'blue',
       }
     });//地面
-    const ball = Bodies.circle(660, 520, 10, {
+    const ball = Bodies.circle(660, 520, 15, {
       render: {
         // sprite: {
         //   texture: './images/ball.png',
@@ -115,7 +115,7 @@ for (var i = 0; i < numCircles; i++) {
         //   yScale:0.4
         // }
       },
-       restitution: 1.3
+       restitution: 1.1
       }); //ボール
       ball.collisionFilter = {
         category: defaultCategory,
@@ -434,11 +434,85 @@ const bottomRight3 = Bodies.rectangle(100, 640, 40, 10, {
     }
   }
 });//左の点オブジェクト
-
-
-
-
-
+const trapezoidVertices4 = [
+  { x: 380, y: 230 },
+  { x: 380, y: 230 },
+  { x: 480, y: 390 },
+  { x: 380, y: 350 }
+];//左の三角の構成
+const trapezoid3 = Bodies.fromVertices(170, 690, [trapezoidVertices4], {
+  isStatic: true,
+  angle: 0,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  render: {
+      fillStyle: '#FFFFFF',
+      sprite: {
+        texture: './images/sankaku.png',
+        xScale:1.5,
+        yScale:1.5
+      }
+  }
+}, true);//左の三角
+const trapezoidVertices5 = [
+  { x: 380, y: 230 },
+  { x: 380, y: 230 },
+  { x: 480, y: 390 },
+  { x: 380, y: 350 }
+];//右の三角図形構成
+const trapezoid4 = Bodies.fromVertices(500, 650, [trapezoidVertices5], {
+  isStatic: true,
+  angle: 4.8,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  render: {
+      fillStyle: '#FFFFFF',
+      sprite: {
+        texture: './images/walll.png',
+        xScale:1.5,
+        yScale:1.5
+      }
+  }
+}, true);//右の三角
+const bottomRight4 = Bodies.rectangle(570, 640, 40, 10, {
+  isStatic: true,
+  angle: 1.6,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  restitution: 0,
+  render: {
+    fillStyle:'#fefefe',
+    sprite: {
+      texture: './images/object5.png',
+      xScale:1.2,
+      yScale:1.2
+    }
+  }
+});//右の点オブジェクト
+const trapezoidVertices6 = [
+  { x: 290, y: 270 },
+  { x: 290, y: 270 },
+  { x: 350, y: 310 },
+  { x: 350, y: 250 }
+];//右の三角図形構成
+const trapezoid5 = Bodies.fromVertices(270, 240, [trapezoidVertices6], {
+  isStatic: true,
+  angle: 5.1,
+  collisionFilter: {
+    category: defaultCategory // デフォルトカテゴリーに設定
+},
+  render: {
+      fillStyle: '#FFFFFF',
+      sprite: {
+        texture: './images/ichigo.png',
+        xScale:1.4,
+        yScale:1.4
+      }
+  }
+}, true);//右の三角
 
 // Events.on(engine, 'beforeUpdate', () => {
 //   const currentAngle = object3.angle;
@@ -502,7 +576,7 @@ const bottomRight3 = Bodies.rectangle(100, 640, 40, 10, {
       }, 10);
   }//右の弾くアニメーション
 });
-    World.add(engine.world, [bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
@@ -558,9 +632,9 @@ render.canvas.addEventListener("mousedown", event => {
   ) {
     // Animate launcher position
     let startTime = Date.now();
-    const duration = 1000; // 2 seconds
+    const duration = 1500; // 2 seconds
     const initialY = launcher.position.y;
-    const targetY = 400;
+    const targetY = 100;
 
     const animationFrame = () => {
       const currentTime = Date.now();
