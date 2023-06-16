@@ -8,6 +8,9 @@ export default function Wall() {
   const [gameOver, setGameOver] = useState<boolean>(false); 
   const isColliding = useRef<boolean>(false); 
   const [score, setScore] = useState<number>(0);
+  const [gobou, setGobou] = useState<number>(0);
+  const [motu, setMotu] = useState<number>(0);
+  const [ichigo, setIchigo] = useState<number>(0);
   const [storedValue, setStoredValue] = useState<string | null>(null);//ローカルストレージで使う変数
   useEffect(() => {
     const value = localStorage.getItem('key');
@@ -28,7 +31,7 @@ const sensorCategory = 0x0002;
             width: 700,
             height: 950,
             wireframes: false,
-            background: 'gray' 
+            background: 'gray'
           }
         });//Matterjsの描画範囲
 
@@ -72,8 +75,6 @@ for (var i = 0; i < numCircles; i++) {
     // 配列に円を追加します。
     circles.push(circle);
 }//半円作成処理
-
-
     const wallLeft = Bodies.rectangle(10, 540, 800, 10, {
       isStatic: true,
       angle: Math.PI / 2,
@@ -96,7 +97,7 @@ for (var i = 0; i < numCircles; i++) {
     },
       restitution: 0
     });//右の壁
-    const wallBottom = Bodies.rectangle(500, 930, 1100, 10, {
+    const wallBottom = Bodies.rectangle(500, 1030, 1100, 10, {
       isStatic: true,
       restitution: 0,
       collisionFilter: {
@@ -107,7 +108,8 @@ for (var i = 0; i < numCircles; i++) {
         fillStyle: 'blue',
       }
     });//地面
-    const ball = Bodies.circle(660, 520, 15, {
+    // const ball = Bodies.circle(660, 520, 15, {
+      const ball = Bodies.circle(550, 200, 15, {
       render: {
         // sprite: {
         //   texture: './images/ball.png',
@@ -121,7 +123,7 @@ for (var i = 0; i < numCircles; i++) {
         category: defaultCategory,
         mask: defaultCategory // デフォルトカテゴリーとのみ衝突
     };//ボールに対してcollisionFilterを設定
-    const patation = Bodies.rectangle(640, 560, 770, 10, {
+    const patation = Bodies.rectangle(640, 560, 700, 10, {
       isStatic: true,
       angle: Math.PI / 2,
       collisionFilter: {
@@ -142,30 +144,30 @@ for (var i = 0; i < numCircles; i++) {
     },
       restitution: 0
     });//発射台、真四角の図形
-    const diagonal = Bodies.rectangle(600, 150, 100, 10, {
+    const diagonal = Bodies.rectangle(590, 380, 130, 10, {
       isStatic: true,
       angle: 3.8,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
     render: {
-      fillStyle: '#ff2f2f'
+      fillStyle: '#ff2f2f',
     },
       restitution: 0
     });//右上の斜めの図形1
-    const object1 = Bodies.rectangle(520, 105, 100, 10, {
+    const object1 = Bodies.rectangle(590, 395, 100, 10, {
       isStatic: true,
       restitution: 0,
-      angle: 3.5,
+      angle: 3.8,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       render: {
-        // sprite: {
-        //   texture: './images/amatti.png',
-        //   xScale:0.6,
-        //   yScale:0.6
-        // },
+        sprite: {
+          texture: './images/yellow2.png',
+          xScale:1.2,
+          yScale:1.2
+        },
         fillStyle: 'red'
       }
     });//右上の斜めの図形2
@@ -513,7 +515,7 @@ const trapezoid5 = Bodies.fromVertices(270, 240, [trapezoidVertices6], {
       }
   }
 }, true);//いちご
-const tempra = Bodies.circle(440, 200, 10, {
+const tempra = Bodies.circle(540, 240, 10, {
   isStatic: true,
   render: {
     sprite: {
@@ -550,7 +552,38 @@ const tempra = Bodies.circle(440, 200, 10, {
         }
       }
     });//モツの下の黄色の
+// 曲線を構成する円のパラメータ
+const centerX2 = render.options?.width ? render.options.width / 1.3 : 0; // 画面中央のx座標
+const centerY2 = render.options?.height ? render.options.height / 3.9 : 0; // 画面中央のy座標
+const radius2 = 100; // 円の半径
+const numCircles2 = 220; // 曲線上の円の数
+// 曲線を構築する
+var angleStep2 = (2 * Math.PI) / numCircles2; // 角度のステップ
+var circles2 = [];
+// 4分の1の円をスキップするための条件を設定
+var skipRangeStart = 0;
+var skipRangeEnd = Math.floor(numCircles2 / 4);
+for (var i = 0; i < numCircles2; i++) {
+  // スキップ範囲内の場合はスキップして次のループへ進む
+  if (i >= skipRangeStart && i < skipRangeEnd) {
+    continue;
+  }
+  var angle = -(angleStep2 * i + Math.PI / 2); // 角度に90度を加える
+  var x = centerX2 + Math.cos(angle) * radius2;
+  var y = centerY2 - Math.sin(angle) * radius2;
 
+  var circle2 = Bodies.circle(x, y, 5, {
+    isStatic: true,
+    render: {
+      fillStyle: 'red',
+      strokeStyle: 'red',
+      lineWidth: 1
+    }
+  });
+  circles2.push(circle2);
+}
+// 曲線を追加
+Composite.add(engine.world, circles2);
 
 
     
@@ -564,58 +597,60 @@ const tempra = Bodies.circle(440, 200, 10, {
 //   const newAngle = currentAngle - 0.03;
 //   Body.setAngle(hiyoko, newAngle);
 // });//ひよこ饅頭回転処理
-  render.canvas.addEventListener('mousedown', (event) => {
-    const mousePosition = { x: event.clientX, y: event.clientY };
-    if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
-        
-        let angle = 2.0;
-        const endAngle = 1.0;
-        const step = 0.1;
-        let decreasing = true;
 
-        const intervalId = setInterval(() => {
-            // 角度を減らす
-            if (decreasing) {
-                angle -= step;
-                if (angle <= endAngle) {
-                    decreasing = false;
-                }
-            } 
-            // 角度を増やす
-            else {
-                angle += step;
-                if (angle >= 2.0) {
-                    clearInterval(intervalId);
-                }
-            }
-
-            Body.setAngle(trapezoid1, angle);
-        }, 10); // 20ミリ秒ごとに角度を更新
-    }//左の弾くアニメーション
-    if (Vertices.contains(trapezoid2.vertices, mousePosition)) {
-
-      let angle = 4.4;
-      const endAngle = 5.4;
-      const step = 0.1;
-      let increasing = true;
-
-      const intervalId2 = setInterval(() => {
-          if (increasing) {
-              angle += step;
-              if (angle >= endAngle) {
-                  increasing = false;
+document.addEventListener('keydown', (event) => {
+  switch(event.key) {
+      // 左方向キーが押された場合
+      case 'ArrowLeft':
+          // 左の弾くアニメーション
+          let angleLeft = 2.0;
+          const endAngleLeft = 1.0;
+          const stepLeft = 0.1;
+          let decreasingLeft = true;
+          const intervalIdLeft = setInterval(() => {
+              // 角度を減らす
+              if (decreasingLeft) {
+                  angleLeft -= stepLeft;
+                  if (angleLeft <= endAngleLeft) {
+                      decreasingLeft = false;
+                  }
+              } 
+              // 角度を増やす
+              else {
+                  angleLeft += stepLeft;
+                  if (angleLeft >= 2.0) {
+                      clearInterval(intervalIdLeft);
+                  }
               }
-          } else {
-              angle -= step;
-              if (angle <= 4.4) {
-                  clearInterval(intervalId2);
-              }
-          }
+              Body.setAngle(trapezoid1, angleLeft);
+          }, 10); // 20ミリ秒ごとに角度を更新
+          break;
 
-          Body.setAngle(trapezoid2, angle);
-      }, 10);
-  }//右の弾くアニメーション
+      // 右方向キーが押された場合
+      case 'ArrowRight':
+          // 右の弾くアニメーション
+          let angleRight = 4.4;
+          const endAngleRight = 5.4;
+          const stepRight = 0.1;
+          let increasingRight = true;
+          const intervalIdRight = setInterval(() => {
+              if (increasingRight) {
+                  angleRight += stepRight;
+                  if (angleRight >= endAngleRight) {
+                      increasingRight = false;
+                  }
+              } else {
+                  angleRight -= stepRight;
+                  if (angleRight <= 4.4) {
+                      clearInterval(intervalIdRight);
+                  }
+              }
+              Body.setAngle(trapezoid2, angleRight);
+          }, 10);
+          break;
+  }
 });
+
     World.add(engine.world, [bottomRight5, motu, tempra, trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
@@ -633,6 +668,24 @@ const tempra = Bodies.circle(440, 200, 10, {
           // Set isColliding to true to avoid adding points again until collision ends
           isColliding.current = true;
         }
+        if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === motu) || (pair.bodyA === motu && pair.bodyB === ball))) {
+          // Collision detected, increase points
+          setMotu(prevMotu => prevMotu + 0);
+          // Set isColliding to true to avoid adding points again until collision ends
+          isColliding.current = true;
+        }
+        if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === trapezoid5) || (pair.bodyA === trapezoid5 && pair.bodyB === ball))) {
+          // Collision detected, increase points
+          setIchigo(prevIchigo => prevIchigo + 0);
+          // Set isColliding to true to avoid adding points again until collision ends
+          isColliding.current = true;
+        }
+        if (!isColliding.current && ((pair.bodyA === ball && pair.bodyB === tempra) || (pair.bodyA === tempra && pair.bodyB === ball))) {
+          // Collision detected, increase points
+          setGobou(prevGobou => prevGobou + 40);
+          // Set isColliding to true to avoid adding points again until collision ends
+          isColliding.current = true;
+        }
       });
     });//オブジェクトが衝突検知処理
 
@@ -646,11 +699,23 @@ const tempra = Bodies.circle(440, 200, 10, {
           // Set isColliding back to false
           isColliding.current = false;
         }
+        if (isColliding.current && ((pair.bodyA === ball && pair.bodyB === motu) || (pair.bodyA === motu && pair.bodyB === ball))) {
+          // Set isColliding back to false
+          isColliding.current = false;
+        }
+        if (isColliding.current && ((pair.bodyA === ball && pair.bodyB === trapezoid5) || (pair.bodyA === trapezoid5 && pair.bodyB === ball))) {
+          // Set isColliding back to false
+          isColliding.current = false;
+        }
+        if (isColliding.current && ((pair.bodyA === ball && pair.bodyB === tempra) || (pair.bodyA === tempra && pair.bodyB === ball))) {
+          // Set isColliding back to false
+          isColliding.current = false;
+        }
       });
     });//オブジェクトが衝突して離れたのを検知する処理
     Events.on(engine, 'afterUpdate', () => {
       // ボールが地面から1000px以上離れているか確認
-      if (ball.position.y < wallBottom.position.y - 795) {
+      if (ball.position.y < wallBottom.position.y - 1795) {
         setGameOver(true);
       }
     });//ボールが10000px以上離れたらゲームオーバー
@@ -658,6 +723,7 @@ const tempra = Bodies.circle(440, 200, 10, {
       event.pairs.forEach((pair) => {
         if ((pair.bodyA === ball && pair.bodyB === wallBottom) || (pair.bodyA === wallBottom && pair.bodyB === ball)) {
           setGameOver(true);
+          // location.href = '/result'
         }
       });
     });//地面と接触した時のゲームオーバー処理
@@ -672,7 +738,7 @@ render.canvas.addEventListener("mousedown", event => {
   ) {
     // Animate launcher position
     let startTime = Date.now();
-    const duration = 1500; // 2 seconds
+    const duration = 1000; // 2 seconds
     const initialY = launcher.position.y;
     const targetY = 100;
 
@@ -763,6 +829,7 @@ Events.on(engine, 'afterUpdate', () => {
         <div id="matter-js-canvas"></div>
             {gameOver && <div>終了</div>}
             <div>Points: {points}</div>
+            <div>Points: {gobou}</div>
             {gameOver && <div>Final Score: {score}</div>}
             {storedValue && <p>ローカルストレージから取得したデータ: {storedValue}</p>}
           </div>
