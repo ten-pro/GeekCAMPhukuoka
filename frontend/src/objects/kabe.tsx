@@ -125,39 +125,111 @@ Composite.add(engine.world, circles);
 // const oppositeChimney8 = Bodies.fromVertices(400, 750, [oppositeVertices], { isStatic: true, angle: -Math.PI/7, restitution: 0.8 });
 // Composite.add(engine.world, oppositeChimney8);
 // 衝突イベントリスナーを作成
-// Events.on(engine, 'collisionStart', function(event) {
-//   const pairs = event.pairs;
 
-//   // 衝突したペアをループ処理
-//   for (let i = 0; i < pairs.length; i++) {
-//     const pair = pairs[i];
+Events.on(engine, 'collisionStart', function(event) {
+  const pairs = event.pairs;
 
-//     // 衝突した物体がボールと長方形の場合
-//     if (pair.bodyA === ball1 && pair.bodyB === oppositeChimney8) {
-//       // 長方形を上に45度動かす
-//       Body.setAngle(oppositeChimney8, +Math.PI / 4);
-//       // ボールを真上に上げる
-//       Body.setVelocity(ball1, { x: ball1.velocity.x, y: -15 }); // 速度を調整する場合は値を変更
-//       Body.setAngularVelocity(ball1, 1); // 角速度をリセット
+  // 衝突したペアをループ処理
+  for (let i = 0; i < pairs.length; i++) {
+    const pair = pairs[i];
 
-//       // 一定時間後に角度を元に戻す
-//       setTimeout(function() {
-//         Body.setAngle(oppositeChimney8, -Math.PI / 7); // 元の角度に戻す
-//       }, 200); // 1秒後に戻す（適宜時間を調整）
+    // 衝突した物体がボールと長方形の場合
+    if (pair.bodyA === ball1 && pair.bodyB === oppositeChimney8) {
+      // 長方形を上に45度動かす
+      Body.setAngle(oppositeChimney8, +Math.PI / 4);
+      // ボールを真上に上げる
+      Body.setVelocity(ball1, { x: ball1.velocity.x, y: -15 }); // 速度を調整する場合は値を変更
+      Body.setAngularVelocity(ball1, 1); // 角速度をリセット
 
-//       break;
-//     } else if (pair.bodyA === oppositeChimney8 && pair.bodyB === ball1) {
-//       // 長方形を上に45度動かす
-//       Body.setAngle(oppositeChimney8, -Math.PI / 4);
+      // 一定時間後に角度を元に戻す
+      setTimeout(function() {
+        Body.setAngle(oppositeChimney8, -Math.PI / 7); // 元の角度に戻す
+      }, 200); // 1秒後に戻す（適宜時間を調整）
 
-//       // 一定時間後に角度を元に戻す
-//       setTimeout(function() {
-//         Body.setAngle(oppositeChimney8, -Math.PI / 7); // 元の角度に戻す
-//       }, 200); // 1秒後に戻す（適宜時間を調整）
-//       break;
-//     }
-//   }
-// });
+      break;
+    } else if (pair.bodyA === oppositeChimney8 && pair.bodyB === ball1) {
+      // 長方形を上に45度動かす
+      Body.setAngle(oppositeChimney8, -Math.PI / 4);
+
+      // 一定時間後に角度を元に戻す
+      setTimeout(function() {
+        Body.setAngle(oppositeChimney8, -Math.PI / 7); // 元の角度に戻す
+      }, 200); // 1秒後に戻す（適宜時間を調整）
+      break;
+    }
+  }
+
+  //↓これは緩やかな形をしたオブジェクト
+  // 曲線を構成する円のパラメータ
+const centerX1 = render.options?.width ? render.options.width / 3 : 0; // 画面中央のx座標
+const centerY1 = render.options?.height ? render.options.height / 2.2 : 0; // 画面中央のy座標
+const initialRadius1 = 80; // 初期半径
+const finalRadius1 = 190; // 最終的な半径
+const numCircles1 = 220; // 曲線上の円の数
+
+// 曲線を構築する
+var angleStep1 = (Math.PI / numCircles1)*0.5;
+var circles1 = [];
+
+for (var i = 0; i < numCircles1; i++) {
+  var angle1 = angleStep1 * i;
+  var radius1 = initialRadius1 + ((finalRadius1 - initialRadius1) / numCircles1) * i; // 円の半径を線形に変化させる
+  var x = centerX1 + Math.cos(angle1) * radius1;
+  var y = centerY1 - Math.sin(angle1) * radius1;
+  var circle = Bodies.circle(x, y, 20, {
+    isStatic: true,
+    render: {
+      fillStyle: 'black',
+      strokeStyle: 'black',
+      lineWidth: 1
+    }
+  });
+  circles1.push(circle);
+}
+
+// 曲線を追加
+Composite.add(engine.world, circles1);
+
+//円の４分の１が空いた円のオブジェクト
+// 曲線を構成する円のパラメータ
+const centerX2 = render.options?.width ? render.options.width / 3.3 : 0; // 画面中央のx座標
+const centerY2 = render.options?.height ? render.options.height / 2.6 : 0; // 画面中央のy座標
+const radius2 = 140; // 円の半径
+const numCircles2 = 220; // 曲線上の円の数
+
+// 曲線を構築する
+var angleStep2 = (2 * Math.PI) / numCircles2; // 角度のステップ
+var circles2 = [];
+
+// 4分の1の円をスキップするための条件を設定
+var skipRangeStart = 0;
+var skipRangeEnd = Math.floor(numCircles2 / 4);
+
+for (var i = 0; i < numCircles2; i++) {
+  // スキップ範囲内の場合はスキップして次のループへ進む
+  if (i >= skipRangeStart && i < skipRangeEnd) {
+    continue;
+  }
+
+  var angle = -(angleStep2 * i + Math.PI / 2); // 角度に90度を加える
+  var x = centerX2 + Math.cos(angle) * radius2;
+  var y = centerY2 - Math.sin(angle) * radius2;
+
+  var circle2 = Bodies.circle(x, y, 5, {
+    isStatic: true,
+    render: {
+      fillStyle: 'black',
+      strokeStyle: 'black',
+      lineWidth: 1
+    }
+  });
+  circles2.push(circle2);
+}
+
+// 曲線を追加
+Composite.add(engine.world, circles2);
+
+});
 
     Engine.run(engine);
     Render.run(render);
