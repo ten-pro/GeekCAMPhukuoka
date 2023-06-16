@@ -147,23 +147,23 @@ for (var i = 0; i < numCircles; i++) {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
     render: {
-      fillStyle: '#ff2f2f'
+      fillStyle: '#ff2f2f',
     },
       restitution: 0
     });//右上の斜めの図形1
-    const object1 = Bodies.rectangle(520, 105, 100, 10, {
+    const object1 = Bodies.rectangle(590, 395, 100, 10, {
       isStatic: true,
       restitution: 0,
-      angle: 3.5,
+      angle: 3.8,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
     },
       render: {
-        // sprite: {
-        //   texture: './images/amatti.png',
-        //   xScale:0.6,
-        //   yScale:0.6
-        // },
+        sprite: {
+          texture: './images/yellow2.png',
+          xScale:1.2,
+          yScale:1.2
+        },
         fillStyle: 'red'
       }
     });//右上の斜めの図形2
