@@ -31,7 +31,7 @@ const sensorCategory = 0x0002;
             width: 700,
             height: 950,
             wireframes: false,
-            background: 'gray' 
+            background: 'gray'
           }
         });//Matterjsの描画範囲
 
