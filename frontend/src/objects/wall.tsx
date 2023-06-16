@@ -523,8 +523,37 @@ const tempra = Bodies.circle(440, 200, 10, {
     }
   },
    restitution: 1.1
-  }); //ボール
+  }); //ramen
+  const motu = Bodies.circle(370, 300, 10, {
+    isStatic: true,
+    render: {
+      sprite: {
+        texture: './images/motu.png',
+        xScale:1.3,
+        yScale:1.3
+      }
+    },
+     restitution: 1.1
+    }); //motu
+    const bottomRight5 = Bodies.rectangle(370, 380, 50, 10, {
+      isStatic: true,
+      angle: 0,
+      collisionFilter: {
+        category: defaultCategory // デフォルトカテゴリーに設定
+    },
+      restitution: 0,
+      render: {
+        sprite: {
+          texture: './images/yellow.png',
+          xScale:1,
+          yScale:1
+        }
+      }
+    });//モツの下の黄色の
 
+
+
+    
 // Events.on(engine, 'beforeUpdate', () => {
 //   const currentAngle = object3.angle;
 //   const newAngle = currentAngle + 0.03;
@@ -587,7 +616,7 @@ const tempra = Bodies.circle(440, 200, 10, {
       }, 10);
   }//右の弾くアニメーション
 });
-    World.add(engine.world, [tempra, trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [bottomRight5, motu, tempra, trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
