@@ -597,54 +597,60 @@ Composite.add(engine.world, circles2);
 //   const newAngle = currentAngle - 0.03;
 //   Body.setAngle(hiyoko, newAngle);
 // });//ひよこ饅頭回転処理
-  render.canvas.addEventListener('mousedown', (event) => {
-    const mousePosition = { x: event.clientX, y: event.clientY };
-    if (Vertices.contains(trapezoid1.vertices, mousePosition)) {
-        
-        let angle = 2.0;
-        const endAngle = 1.0;
-        const step = 0.1;
-        let decreasing = true;
-        const intervalId = setInterval(() => {
-            // 角度を減らす
-            if (decreasing) {
-                angle -= step;
-                if (angle <= endAngle) {
-                    decreasing = false;
-                }
-            } 
-            // 角度を増やす
-            else {
-                angle += step;
-                if (angle >= 2.0) {
-                    clearInterval(intervalId);
-                }
-            }
-            Body.setAngle(trapezoid1, angle);
-        }, 10); // 20ミリ秒ごとに角度を更新
-    }//左の弾くアニメーション
-    if (Vertices.contains(trapezoid2.vertices, mousePosition)) {
-      let angle = 4.4;
-      const endAngle = 5.4;
-      const step = 0.1;
-      let increasing = true;
 
-      const intervalId2 = setInterval(() => {
-          if (increasing) {
-              angle += step;
-              if (angle >= endAngle) {
-                  increasing = false;
+document.addEventListener('keydown', (event) => {
+  switch(event.key) {
+      // 左方向キーが押された場合
+      case 'ArrowLeft':
+          // 左の弾くアニメーション
+          let angleLeft = 2.0;
+          const endAngleLeft = 1.0;
+          const stepLeft = 0.1;
+          let decreasingLeft = true;
+          const intervalIdLeft = setInterval(() => {
+              // 角度を減らす
+              if (decreasingLeft) {
+                  angleLeft -= stepLeft;
+                  if (angleLeft <= endAngleLeft) {
+                      decreasingLeft = false;
+                  }
+              } 
+              // 角度を増やす
+              else {
+                  angleLeft += stepLeft;
+                  if (angleLeft >= 2.0) {
+                      clearInterval(intervalIdLeft);
+                  }
               }
-          } else {
-              angle -= step;
-              if (angle <= 4.4) {
-                  clearInterval(intervalId2);
+              Body.setAngle(trapezoid1, angleLeft);
+          }, 10); // 20ミリ秒ごとに角度を更新
+          break;
+
+      // 右方向キーが押された場合
+      case 'ArrowRight':
+          // 右の弾くアニメーション
+          let angleRight = 4.4;
+          const endAngleRight = 5.4;
+          const stepRight = 0.1;
+          let increasingRight = true;
+          const intervalIdRight = setInterval(() => {
+              if (increasingRight) {
+                  angleRight += stepRight;
+                  if (angleRight >= endAngleRight) {
+                      increasingRight = false;
+                  }
+              } else {
+                  angleRight -= stepRight;
+                  if (angleRight <= 4.4) {
+                      clearInterval(intervalIdRight);
+                  }
               }
-          }
-          Body.setAngle(trapezoid2, angle);
-      }, 10);
-  }//右の弾くアニメーション
+              Body.setAngle(trapezoid2, angleRight);
+          }, 10);
+          break;
+  }
 });
+
     World.add(engine.world, [bottomRight5, motu, tempra, trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
