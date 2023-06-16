@@ -119,7 +119,7 @@ for (var i = 0; i < numCircles; i++) {
         category: defaultCategory,
         mask: defaultCategory // デフォルトカテゴリーとのみ衝突
     };//ボールに対してcollisionFilterを設定
-    const patation = Bodies.rectangle(640, 560, 770, 10, {
+    const patation = Bodies.rectangle(640, 560, 700, 10, {
       isStatic: true,
       angle: Math.PI / 2,
       collisionFilter: {
@@ -140,7 +140,7 @@ for (var i = 0; i < numCircles; i++) {
     },
       restitution: 0
     });//発射台、真四角の図形
-    const diagonal = Bodies.rectangle(600, 150, 100, 10, {
+    const diagonal = Bodies.rectangle(590, 380, 130, 10, {
       isStatic: true,
       angle: 3.8,
       collisionFilter: {
@@ -511,7 +511,7 @@ const trapezoid5 = Bodies.fromVertices(270, 240, [trapezoidVertices6], {
       }
   }
 }, true);//いちご
-const tempra = Bodies.circle(440, 200, 10, {
+const tempra = Bodies.circle(540, 240, 10, {
   isStatic: true,
   render: {
     sprite: {
@@ -549,9 +549,9 @@ const tempra = Bodies.circle(440, 200, 10, {
       }
     });//モツの下の黄色の
 // 曲線を構成する円のパラメータ
-const centerX2 = render.options?.width ? render.options.width / 3.3 : 0; // 画面中央のx座標
-const centerY2 = render.options?.height ? render.options.height / 2.6 : 0; // 画面中央のy座標
-const radius2 = 140; // 円の半径
+const centerX2 = render.options?.width ? render.options.width / 1.3 : 0; // 画面中央のx座標
+const centerY2 = render.options?.height ? render.options.height / 3.9 : 0; // 画面中央のy座標
+const radius2 = 100; // 円の半径
 const numCircles2 = 220; // 曲線上の円の数
 // 曲線を構築する
 var angleStep2 = (2 * Math.PI) / numCircles2; // 角度のステップ
