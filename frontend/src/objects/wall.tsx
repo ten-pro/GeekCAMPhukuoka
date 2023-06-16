@@ -22,7 +22,7 @@ export default function Wall() {
 const sensorCategory = 0x0002;
     useEffect(() => {
         const engine = Engine.create();
-        engine.timing.timeScale = 1.2;//重力
+        engine.timing.timeScale = 0.3;//重力
         const canvasElement = document.getElementById('matter-js-canvas') as HTMLElement | null;
         const render = Render.create({
           element: canvasElement!,
@@ -109,7 +109,7 @@ for (var i = 0; i < numCircles; i++) {
       }
     });//地面
     // const ball = Bodies.circle(660, 520, 15, {
-      const ball = Bodies.circle(550, 200, 15, {
+      const ball = Bodies.circle(300, 500, 15, {
       render: {
         // sprite: {
         //   texture: './images/ball.png',
@@ -117,7 +117,8 @@ for (var i = 0; i < numCircles; i++) {
         //   yScale:0.4
         // }
       },
-       restitution: 1.1
+       restitution: 1.4
+
       }); //ボール
       ball.collisionFilter = {
         category: defaultCategory,
@@ -360,6 +361,7 @@ for (var i = 0; i < numCircles; i++) {
 ];//右の弾くやつの図形構成
   const trapezoid1 = Bodies.fromVertices(250, 860, [trapezoidVertices1], {
       isStatic: true,
+      restitution: 20,
       angle: 2,
       collisionFilter: {
         category: defaultCategory // デフォルトカテゴリーに設定
@@ -376,6 +378,7 @@ for (var i = 0; i < numCircles; i++) {
   const trapezoid2 = Bodies.fromVertices(470, 870, [trapezoidVertices2], {
     isStatic: true,
     angle: 4.4,
+    restitution: 20,
     collisionFilter: {
       category: defaultCategory // デフォルトカテゴリーに設定
   },
@@ -420,7 +423,7 @@ const bottomRight2 = Bodies.rectangle(590, 845, 100, 5, {
     // }
   }
 });//右の白線
-const bottomRight3 = Bodies.rectangle(100, 640, 40, 10, {
+const bottomRight3 = Bodies.rectangle(60, 600, 40, 10, {
   isStatic: true,
   angle: 1.6,
   collisionFilter: {
@@ -442,7 +445,7 @@ const trapezoidVertices4 = [
   { x: 480, y: 390 },
   { x: 380, y: 350 }
 ];//左の三角の構成
-const trapezoid3 = Bodies.fromVertices(170, 690, [trapezoidVertices4], {
+const trapezoid3 = Bodies.fromVertices(130, 620, [trapezoidVertices4], {
   isStatic: true,
   angle: 0,
   collisionFilter: {
@@ -450,11 +453,11 @@ const trapezoid3 = Bodies.fromVertices(170, 690, [trapezoidVertices4], {
 },
   render: {
       fillStyle: '#FFFFFF',
-      sprite: {
-        texture: './images/sankaku.png',
-        xScale:1.5,
-        yScale:1.5
-      }
+      // sprite: {
+      //   texture: './images/sankaku.png',
+      //   xScale:1.5,
+      //   yScale:1.5
+      // }
   }
 }, true);//左の三角
 const trapezoidVertices5 = [
@@ -463,7 +466,7 @@ const trapezoidVertices5 = [
   { x: 480, y: 390 },
   { x: 380, y: 350 }
 ];//右の三角図形構成
-const trapezoid4 = Bodies.fromVertices(500, 650, [trapezoidVertices5], {
+const trapezoid4 = Bodies.fromVertices(550, 590, [trapezoidVertices5], {
   isStatic: true,
   angle: 4.8,
   collisionFilter: {
@@ -478,7 +481,7 @@ const trapezoid4 = Bodies.fromVertices(500, 650, [trapezoidVertices5], {
       }
   }
 }, true);//右の三角
-const bottomRight4 = Bodies.rectangle(570, 640, 40, 10, {
+const bottomRight4 = Bodies.rectangle(610, 540, 40, 10, {
   isStatic: true,
   angle: 1.6,
   collisionFilter: {
@@ -605,7 +608,7 @@ document.addEventListener('keydown', (event) => {
           // 左の弾くアニメーション
           let angleLeft = 2.0;
           const endAngleLeft = 1.0;
-          const stepLeft = 0.1;
+          const stepLeft = 0.5;
           let decreasingLeft = true;
           const intervalIdLeft = setInterval(() => {
               // 角度を減らす
@@ -631,7 +634,7 @@ document.addEventListener('keydown', (event) => {
           // 右の弾くアニメーション
           let angleRight = 4.4;
           const endAngleRight = 5.4;
-          const stepRight = 0.1;
+          const stepRight = 0.2;
           let increasingRight = true;
           const intervalIdRight = setInterval(() => {
               if (increasingRight) {
