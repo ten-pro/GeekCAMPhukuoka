@@ -497,7 +497,7 @@ const trapezoidVertices6 = [
   { x: 290, y: 270 },
   { x: 350, y: 310 },
   { x: 350, y: 250 }
-];//右の三角図形構成
+];//いちご
 const trapezoid5 = Bodies.fromVertices(270, 240, [trapezoidVertices6], {
   isStatic: true,
   angle: 5.1,
@@ -512,7 +512,18 @@ const trapezoid5 = Bodies.fromVertices(270, 240, [trapezoidVertices6], {
         yScale:1.4
       }
   }
-}, true);//右の三角
+}, true);//いちご
+const tempra = Bodies.circle(440, 200, 10, {
+  isStatic: true,
+  render: {
+    sprite: {
+      texture: './images/temp.png',
+      xScale:1.3,
+      yScale:1.3
+    }
+  },
+   restitution: 1.1
+  }); //ボール
 
 // Events.on(engine, 'beforeUpdate', () => {
 //   const currentAngle = object3.angle;
@@ -576,7 +587,7 @@ const trapezoid5 = Bodies.fromVertices(270, 240, [trapezoidVertices6], {
       }, 10);
   }//右の弾くアニメーション
 });
-    World.add(engine.world, [trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
+    World.add(engine.world, [tempra, trapezoid5, bottomRight4, trapezoid4, trapezoid3, bottomRight3, bottomRight2, bottomRight1, object8, object7, object6, ...circles, object5, object4, hiyoko, niwaka, bottomRight, bottomLeft, object3, trapezoid2, trapezoid1, object2, object1, ball, wallLeft,wallRight, wallBottom, patation, diagonal, launcher]);//オブジェクトを追加したら編集
     Engine.run(engine);
     Render.run(render);
     Events.on(engine, 'collisionStart', (event) => {
