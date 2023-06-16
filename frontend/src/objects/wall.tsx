@@ -117,7 +117,7 @@ for (var i = 0; i < numCircles; i++) {
         //   yScale:0.4
         // }
       },
-       restitution: 1.3
+       restitution: 1.4
 
       }); //ボール
       ball.collisionFilter = {
@@ -453,11 +453,11 @@ const trapezoid3 = Bodies.fromVertices(130, 620, [trapezoidVertices4], {
 },
   render: {
       fillStyle: '#FFFFFF',
-      sprite: {
-        texture: './images/sankaku.png',
-        xScale:1.5,
-        yScale:1.5
-      }
+      // sprite: {
+      //   texture: './images/sankaku.png',
+      //   xScale:1.5,
+      //   yScale:1.5
+      // }
   }
 }, true);//左の三角
 const trapezoidVertices5 = [
@@ -608,7 +608,7 @@ document.addEventListener('keydown', (event) => {
           // 左の弾くアニメーション
           let angleLeft = 2.0;
           const endAngleLeft = 1.0;
-          const stepLeft = 0.2;
+          const stepLeft = 0.5;
           let decreasingLeft = true;
           const intervalIdLeft = setInterval(() => {
               // 角度を減らす
