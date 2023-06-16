@@ -72,8 +72,6 @@ for (var i = 0; i < numCircles; i++) {
     // 配列に円を追加します。
     circles.push(circle);
 }//半円作成処理
-
-
     const wallLeft = Bodies.rectangle(10, 540, 800, 10, {
       isStatic: true,
       angle: Math.PI / 2,
@@ -550,7 +548,38 @@ const tempra = Bodies.circle(440, 200, 10, {
         }
       }
     });//モツの下の黄色の
+// 曲線を構成する円のパラメータ
+const centerX2 = render.options?.width ? render.options.width / 3.3 : 0; // 画面中央のx座標
+const centerY2 = render.options?.height ? render.options.height / 2.6 : 0; // 画面中央のy座標
+const radius2 = 140; // 円の半径
+const numCircles2 = 220; // 曲線上の円の数
+// 曲線を構築する
+var angleStep2 = (2 * Math.PI) / numCircles2; // 角度のステップ
+var circles2 = [];
+// 4分の1の円をスキップするための条件を設定
+var skipRangeStart = 0;
+var skipRangeEnd = Math.floor(numCircles2 / 4);
+for (var i = 0; i < numCircles2; i++) {
+  // スキップ範囲内の場合はスキップして次のループへ進む
+  if (i >= skipRangeStart && i < skipRangeEnd) {
+    continue;
+  }
+  var angle = -(angleStep2 * i + Math.PI / 2); // 角度に90度を加える
+  var x = centerX2 + Math.cos(angle) * radius2;
+  var y = centerY2 - Math.sin(angle) * radius2;
 
+  var circle2 = Bodies.circle(x, y, 5, {
+    isStatic: true,
+    render: {
+      fillStyle: 'red',
+      strokeStyle: 'red',
+      lineWidth: 1
+    }
+  });
+  circles2.push(circle2);
+}
+// 曲線を追加
+Composite.add(engine.world, circles2);
 
 
     

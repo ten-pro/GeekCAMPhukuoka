@@ -29,39 +29,39 @@ const ball1 = Bodies.circle(400, 350, 20, { restitution: 1.2 }); // restitution�
 Composite.add(engine.world, [ball1]);
 
 // 曲線を構築する
-var angleStep = Math.PI / numCircles;
-var circles = [];
+// var angleStep = Math.PI / numCircles;
+// var circles = [];
 
-for (var i = 0; i < numCircles; i++) {
-    var angle = angleStep * i;
-    var x = centerX + Math.cos(angle) * radius;
-    var y = centerY - Math.sin(angle) * radius;
-    var circle = Bodies.circle(x, y, 5, {
-        isStatic: true,
-        render: {
-            fillStyle: 'black',
-            strokeStyle: 'black',
-            lineWidth: 1
-        }
-    });
-    circles.push(circle);
-}
+// for (var i = 0; i < numCircles; i++) {
+//     var angle = angleStep * i;
+//     var x = centerX + Math.cos(angle) * radius;
+//     var y = centerY - Math.sin(angle) * radius;
+//     var circle = Bodies.circle(x, y, 5, {
+//         isStatic: true,
+//         render: {
+//             fillStyle: 'black',
+//             strokeStyle: 'black',
+//             lineWidth: 1
+//         }
+//     });
+//     circles.push(circle);
+// }
 
-// 曲線を追加
-Composite.add(engine.world, circles);
+// // 曲線を追加
+// Composite.add(engine.world, circles);
 
 // const chimney3 = Bodies.rectangle(0, 540, 553, 18, { isStatic: true, angle: Math.PI/2, restitution: 0.8 });
 // Composite.add(engine.world, chimney3);
 
-// 右側壁の作成・追加
+// // 右側壁の作成・追加
 // const chimney4 = Bodies.rectangle(600, 540, 553, 18, { isStatic: true, angle: Math.PI/2 ,restitution: 0.8  });
 // Composite.add(engine.world, chimney4);
 
-// 45度の傾斜を持つ長方形の作成
+// // 45度の傾斜を持つ長方形の作成
 // const chimney5 = Bodies.rectangle(90, 700, 190, 11, { isStatic: true,angle: Math.PI/7, restitution: 0.8 });
 // Composite.add(engine.world, chimney5);
 
-// 反対側の傾斜を持つ長方形の作成
+// // 反対側の傾斜を持つ長方形の作成
 // const chimney6 = Bodies.rectangle(510, 700, 190, 11, { isStatic: true, angle: -Math.PI/7, restitution: 0.8 });
 // Composite.add(engine.world, chimney6);
 
@@ -75,7 +75,7 @@ Composite.add(engine.world, circles);
 //   ]
 // ];
 
-// 先が丸まった長方形の作成・追加
+// // 先が丸まった長方形の作成・追加
 // const chimney7 = Bodies.fromVertices(200, 750, vertices, { isStatic: true, angle: Math.PI/7, restitution: 0.8 });
 // Composite.add(engine.world, chimney7);
 
@@ -114,16 +114,16 @@ Composite.add(engine.world, circles);
 // });
 
 // 反対側の先が丸まった長方形の頂点座標
-// const oppositeVertices: Vector[] = [
-//   Vector.create(0, -14),
-//   Vector.create(-70, -7),
-//   Vector.create(-70, 7),
-//   Vector.create(0, 14)
-// ];
+const oppositeVertices: Vector[] = [
+  Vector.create(0, -14),
+  Vector.create(-70, -7),
+  Vector.create(-70, 7),
+  Vector.create(0, 14)
+];
 
 // 反対側の先が丸まった長方形の作成・追加
-// const oppositeChimney8 = Bodies.fromVertices(400, 750, [oppositeVertices], { isStatic: true, angle: -Math.PI/7, restitution: 0.8 });
-// Composite.add(engine.world, oppositeChimney8);
+const oppositeChimney8 = Bodies.fromVertices(400, 750, [oppositeVertices], { isStatic: true, angle: -Math.PI/7, restitution: 0.8 });
+Composite.add(engine.world, oppositeChimney8);
 // 衝突イベントリスナーを作成
 
 Events.on(engine, 'collisionStart', function(event) {
@@ -161,34 +161,34 @@ Events.on(engine, 'collisionStart', function(event) {
 
   //↓これは緩やかな形をしたオブジェクト
   // 曲線を構成する円のパラメータ
-const centerX1 = render.options?.width ? render.options.width / 3 : 0; // 画面中央のx座標
-const centerY1 = render.options?.height ? render.options.height / 2.2 : 0; // 画面中央のy座標
-const initialRadius1 = 80; // 初期半径
-const finalRadius1 = 190; // 最終的な半径
-const numCircles1 = 220; // 曲線上の円の数
+// const centerX1 = render.options?.width ? render.options.width / 3 : 0; // 画面中央のx座標
+// const centerY1 = render.options?.height ? render.options.height / 2.2 : 0; // 画面中央のy座標
+// const initialRadius1 = 80; // 初期半径
+// const finalRadius1 = 190; // 最終的な半径
+// const numCircles1 = 220; // 曲線上の円の数
 
-// 曲線を構築する
-var angleStep1 = (Math.PI / numCircles1)*0.5;
-var circles1 = [];
+// // 曲線を構築する
+// var angleStep1 = (Math.PI / numCircles1)*0.5;
+// var circles1 = [];
 
-for (var i = 0; i < numCircles1; i++) {
-  var angle1 = angleStep1 * i;
-  var radius1 = initialRadius1 + ((finalRadius1 - initialRadius1) / numCircles1) * i; // 円の半径を線形に変化させる
-  var x = centerX1 + Math.cos(angle1) * radius1;
-  var y = centerY1 - Math.sin(angle1) * radius1;
-  var circle = Bodies.circle(x, y, 20, {
-    isStatic: true,
-    render: {
-      fillStyle: 'black',
-      strokeStyle: 'black',
-      lineWidth: 1
-    }
-  });
-  circles1.push(circle);
-}
+// for (var i = 0; i < numCircles1; i++) {
+//   var angle1 = angleStep1 * i;
+//   var radius1 = initialRadius1 + ((finalRadius1 - initialRadius1) / numCircles1) * i; // 円の半径を線形に変化させる
+//   var x = centerX1 + Math.cos(angle1) * radius1;
+//   var y = centerY1 - Math.sin(angle1) * radius1;
+//   var circle = Bodies.circle(x, y, 20, {
+//     isStatic: true,
+//     render: {
+//       fillStyle: 'black',
+//       strokeStyle: 'black',
+//       lineWidth: 1
+//     }
+//   });
+//   circles1.push(circle);
+// }
 
-// 曲線を追加
-Composite.add(engine.world, circles1);
+// // 曲線を追加
+// Composite.add(engine.world, circles1);
 
 //円の４分の１が空いた円のオブジェクト
 // 曲線を構成する円のパラメータ
