@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background-color: bisque;
+}
+
+.button-container {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button {
+  padding: 2vw 8vw;
+  background-color: red;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 20px;
+  font-size: 2vw;
+}
+
+.svg-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.svg-image1 {
+  display: block;
+  margin: 0 auto;
+}
+.svg-image2 {
+  display: block;
+  margin: 0 auto;
+}
+.svg-image3 {
+  display: block;
+  margin: 0 auto;
+  width: 20%;
+  height: 20%;
+}
+  </style>
+</head>
+<body>
+  <div>
+    <img class='background-image' src="start.svg" alt="Background Image" />
+    <div class='button-container'>
+      <a href="index.html" class='button' id="start-button">
+        START
+      </a>
+    </div>
+    <div id="svg-container" class='svg-container'>
+      <img class='svg-image1' src="icigo.svg" alt="SVG Image 1" />
+      <img class='svg-image2' src="men.svg" alt="SVG Image 2" />
+      <img class='svg-image3' src="ramen.svg" alt="SVG Image 3" />
+    </div>
+  </div>
+  <script>
+    
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .body{
+      background-image: url(backimg.svg);
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      height: 100%;
+    }
+    .container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.backgroundImage {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.result_area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 85%;
+  border: 1vw solid #c80b0be3;
+}
+
+.h3{
+  color: white;
+  font-size: 2vw;
+  margin-left: 3vw;
+}
+.h32{
+  color: white;
+  font-size: 2vw;
+  margin-left: 3vw;
+  margin-bottom: 0;
+}
+
+.content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mentai_area{
+  display: flex;
+  width: 40vw;
+}
+.mentaiko{
+  margin-top: 1.4vw;
+  width: 14%;
+  height: 14%;
+}
+
+.ramen_area{
+  display: flex;
+  width: 40vw;
+}
+.ramen{
+  width: 17%;
+  height: 17%;
+  margin-top: 1.4vw;
+}
+
+.motu_area{
+  display: flex;
+  width: 40vw;
+}
+
+.motu{
+  width: 15%;
+  height: 15%;
+  margin-top: 1vw;
+}
+
+.mentai_p{
+  margin: 0;
+  color: white;
+  font-size: 2.3vw;
+  margin-left: 7vw;
+  margin-top: 1.7vw;
+  font-weight: bold;
+}
+
+.ramen_p{
+  margin: 0;
+  color: white;
+  font-size: 2.3vw;
+  margin-left: 6.4vw;
+  margin-top: 3.2vw;
+  font-weight: bold;
+}
+.motu_p{
+  margin: 0;
+  color: white;
+  font-size: 2.3vw;
+  margin-left: 7vw;
+  margin-top: 3.3vw;
+  font-weight: bold;
+}
+
+.btn_area{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5vw;
+}
+
+.restart_area{
+  display: flex;
+  width: 14vw;
+  height: 6vh;
+  background-color: #FF2F2F;
+  border-radius:1.1vw;
+}
+.restart{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  color: white;
+  font-size: 1.6vw;
+  font-weight: bold;
+}
+.p1{
+  margin: 0;
+  color: white;
+  font-size: 2.3vw;
+  margin-top: 2.6vw;
+  font-weight: bold;
+}
+.p2{
+  margin: 0;
+  color: white;
+  font-size: 2.3vw;
+  margin-top: 2.6vw;
+  margin-left: 6.8vw;
+  font-weight: bold;
+}
+  </style>
+</head>
+<body class="body">
+  <div class="container">
+    <div class="backgroundImage" >
+      <div class="result_area">
+        <h3 class="h3">お会計：<span id="score"></span>円</h3>
+        <h3 class="h32">ランキング：<span id="rank"></span>位</h3>
+        <div class="content">
+          <div class="mentai_area">
+            <img src='icigo.svg' class="mentaiko"/>
+            <p class="mentai_p">500円　×　<span id="ichigo"></span></p>
+          </div>
+        </div>
+        <div class="content">
+          <div class="ramen_area">
+            <img src='ramen.svg' class="ramen"/>
+            <p class="ramen_p">1000円　×　<span id="gobou"></span></p>
+          </div>
+        </div>
+        <div class="content">
+          <div class="motu_area">
+            <img src='men.svg' class="motu"/>
+            <p class="motu_p">800円　×　<span id="motu"></span></p>
+          </div>
+        </div>
+        <div class="btn_area">
+          <div class="restart_area">
+            <p class="restart" onclick="restart()">ReSTART</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    function restart(){
+      window.location.href="start.html";
+    }
+    let rank = 0;
+    let rankDis = document.getElementById('rank');
+    
+
+    let score = localStorage.getItem('score');
+    let scoreDis = document.getElementById('score');
+    scoreDis.textContent = score;
+
+    let ichigo = localStorage.getItem('ichigo');
+    let ichigoDis = document.getElementById('ichigo');
+    ichigoDis.textContent = ichigo;
+
+    let gobou = localStorage.getItem('gobou');
+    let gobouDis = document.getElementById('gobou');
+    gobouDis.textContent = gobou;
+
+    let motu = localStorage.getItem('motu');
+    let motuDis = document.getElementById('motu');
+    motuDis.textContent = motu;
+
+    function postScore() {
+  axios.post(
+    'https://mp-class.chips.jp/pinball/Main.php',
+    {
+      create_rank: '',
+      user_name: 'testman',
+      score: score,
+    },
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  )
+  .then(function (response) {
+    console.log(response.data.rank);
+    rankDis.textContent = response.data.rank;
+    // ポスト成功時の処理を記述
+  })
+  .catch(function (error) {
+    console.error(error);
+    // エラー時の処理を記述
+  });
+}
+
+// 画面読み込み時にスコアをポスト
+postScore();
+
+    document.addEventListener('DOMContentLoaded', function () {
+            // 2秒後に音声ファイルを再生
+            setTimeout(function () {
+                var audio = new Audio('12.mp3');
+                audio.play();
+            }, 2000); // 2000ミリ秒 = 2秒
+        });
+  </script>
+</body>
+</html>
